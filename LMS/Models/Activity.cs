@@ -13,6 +13,6 @@ namespace LMS.Models
         public DateTime SlutTime    { get; set; }
         public string   Description { get; set; }
 
-        public virtual ICollection<Course> Kurs { get; set; } // Activities are enrolled to one kurs.
+        public virtual ICollection<Course> Course { get; set; } // Activities are enrolled to one kurs.
     }
 }

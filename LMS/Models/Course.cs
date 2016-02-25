@@ -13,6 +13,6 @@ namespace LMS.Models
         public DateTime SlutTime    { get; set; }
         public int      ActivityId  { get; set; }
 
-        //public virtual ICollection<Group> Group { get; set; } // Course are enrolled to one Group.
+        public virtual ICollection<Group> Group { get; set; } // Course are enrolled to one Group.
     }
 }

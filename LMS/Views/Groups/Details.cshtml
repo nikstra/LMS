@@ -1,0 +1,30 @@
+﻿@model LMS.Models.Group
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Model.Name @Model.StartDate - @Model.EndDate</h2>
+
+<hr />
+
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+
+<div>
+   
+</div>

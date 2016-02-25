@@ -20,7 +20,9 @@ namespace LMS.Models
         public DateTime EndDate { get; set; }
 
         public int ApplicationUserId { get; set; }
+        public int CourseId { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
+        public virtual ICollection<Course> Courses { get; set; }
     }
 }

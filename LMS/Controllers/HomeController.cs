@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +11,13 @@ namespace LMS.Controllers
     {
         public ActionResult Index()
         {
+            // Temporarly using the about page as start page for authenticated users.
+            ViewBag.ReturnUrl = "/Home/About";
+
+            // If user already authenticated, redirect to start page.
+            if (User.Identity.IsAuthenticated)
+                return Redirect(ViewBag.ReturnUrl);
+
             return View();
         }
 

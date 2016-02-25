@@ -9,10 +9,12 @@ namespace LMS.Models
     {
         public int      Id          { get; set; }
         public string   Name        { get; set; }
-        public DateTime StartTime   { get; set; }
-        public DateTime SlutTime    { get; set; }
+        public DateTime StartDate   { get; set; }
+        public DateTime EndDate     { get; set; }
+        public int      GroupId     { get; set; }
         public int      ActivityId  { get; set; }
+        public string   Description { get; set; }
 
-        public virtual ICollection<Group> Group { get; set; } // Course are enrolled to one Group.
+        public virtual ICollection<Activity> Activities { get; set; }
     }
 }

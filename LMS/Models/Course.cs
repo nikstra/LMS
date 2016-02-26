@@ -15,6 +15,7 @@ namespace LMS.Models
         public int      ActivityId  { get; set; }
         public string   Description { get; set; }
 
+        public virtual Group Group { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }
     }
 }

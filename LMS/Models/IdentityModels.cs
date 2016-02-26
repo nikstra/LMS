@@ -10,7 +10,7 @@ namespace LMS.Models
     public class ApplicationUser : IdentityUser
     {
         public int GroupId { get; set; }
-        
+        public virtual Group Group { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

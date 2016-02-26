@@ -14,13 +14,12 @@ namespace LMS.Models
         public string Name { get; set; }
         [Display(Name = "Beskrivning")]
         public string Description { get; set; }
-        [Display(Name = "Start datum")]
+        [Display(Name = "Startdatum")]
         public DateTime StartDate { get; set; }
-        [Display(Name = "Slut datum")]
+        [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
 
-        public int ApplicationUserId { get; set; }
-        public int CourseId { get; set; }
+        public int? CourseId { get; set; }
 
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Course> Courses { get; set; }

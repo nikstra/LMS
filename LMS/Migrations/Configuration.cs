@@ -32,26 +32,26 @@ namespace LMS.Migrations
             //    );
             //
 
-            context.Groups.AddOrUpdate(
-                g => g.Name,
-                new Group { Name = ".NET September 2015", StartDate = new DateTime(2015,09,23), EndDate = new DateTime(2016,03,18), Description = "Systemutvecklarkurs...." }
-                );
+            //context.Groups.AddOrUpdate(
+            //    g => g.Name,
+            //    new Group { Name = ".NET September 2015", StartDate = new DateTime(2015,09,23), EndDate = new DateTime(2016,03,18), Description = "Systemutvecklarkurs...." }
+            //    );
 
-            if (!context.Users.Any(u => u.UserName == "sune@gmail.com"))
-            {
-                //    var roleStore = new RoleStore<IdentityRole>(context);
-                //    var roleManager = new RoleManager<IdentityRole>(roleStore);
+            //if (!context.Users.Any(u => u.UserName == "sune@gmail.com"))
+            //{
+            //    //    var roleStore = new RoleStore<IdentityRole>(context);
+            //    //    var roleManager = new RoleManager<IdentityRole>(roleStore);
 
-                var store = new UserStore<ApplicationUser>(context);
-                var manager = new UserManager<ApplicationUser>(store);
-                var user = new ApplicationUser { UserName = "sune@gmail.com" , GroupId = 4};
+            //    var store = new UserStore<ApplicationUser>(context);
+            //    var manager = new UserManager<ApplicationUser>(store);
+            //    var user = new ApplicationUser { UserName = "sune@gmail.com" , GroupId = 4};
 
 
 
-                manager.Create(user, "password");
-                //    roleManager.Create(new IdentityRole { Name = "admin" });
-                //    manager.AddToRole(user.Id, "admin");
-            }
+            //    manager.Create(user, "password");
+            //    //    roleManager.Create(new IdentityRole { Name = "admin" });
+            //    //    manager.AddToRole(user.Id, "admin");
+            //}
             
         }
     }

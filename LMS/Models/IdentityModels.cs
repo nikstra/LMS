@@ -12,7 +12,6 @@ namespace LMS.Models
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
         
-
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -30,6 +29,8 @@ namespace LMS.Models
         }
 
         public DbSet<Group> Groups { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Activity> Activities { get; set; }
 
         public static ApplicationDbContext Create()
         {

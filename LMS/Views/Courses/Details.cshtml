@@ -4,20 +4,12 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Detalj</h2>
+<h2>@Model.Name @Model.StartDate - @Model.EndDate</h2>
+
+<hr />
 
 <div>
-    <h4>Kurs</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
+    <dl>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>
@@ -25,42 +17,14 @@
         <dd>
             @Html.DisplayFor(model => model.Description)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-
-        @*<dt>
-            @Html.DisplayNameFor(model => model.GroupId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.GroupId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ActivityId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ActivityId)
-        </dd>*@
-
     </dl>
+
+    @Html.Partial("_ActivitiesInCourse")
+
+
 </div>
-<p>
-    @Html.ActionLink("Redigera", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Tillbaka", "Index")
-</p>
+
+    <p>
+        @Html.ActionLink("Redigera", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)
+    </p>

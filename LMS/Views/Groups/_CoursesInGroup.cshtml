@@ -13,7 +13,7 @@
     @foreach (var course in Model.Courses)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => course.Name)</td>
+            <td>@Html.ActionLink(course.Name, "Details", "Courses", new { id=course.Id }, null)</td>
             <td>@Html.DisplayFor(modelItem => course.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => course.EndDate)</td>
 

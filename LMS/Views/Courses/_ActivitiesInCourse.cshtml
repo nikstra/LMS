@@ -1,0 +1,24 @@
+﻿@model LMS.Models.Course
+
+<p>
+    @Html.ActionLink("Create Activity", "Create", "Courses")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Activity Title</th>
+        <th>Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+    </tr>
+    @foreach (var activity in Model.Activities)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => activity.Name)</td>
+            <td>@Html.DisplayFor(modelItem => activity.Description)</td>
+            <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
+            <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
+
+        </tr>
+    }
+</table>

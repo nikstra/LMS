@@ -1,0 +1,28 @@
+﻿@model LMS.Models.Group
+
+<p>
+    @Html.ActionLink("Lägg till en ny Kurs", "Create", "Courses")
+</p>
+
+<table class="table">
+    <tr>
+        <th>Kursnamn</th>
+        <th>Startdatum</th>
+        <th>Slutdatum</th>
+    </tr>
+    @foreach (var course in Model.Courses)
+    {
+        <tr>
+            <td>@Html.ActionLink(course.Name, "Details", "Courses", new { id = course.Id }, null)</td>
+            <td>@Html.DisplayFor(modelItem => course.StartDate)</td>
+            <td>@Html.DisplayFor(modelItem => course.EndDate)</td>
+
+            <td>
+                @Html.ActionLink("Redigera", "Edit", "Courses", new { id = course.Id }, null) |
+                @Html.ActionLink("Radera", "Delete", "Courses", new { id = course.Id }, null)
+            </td>
+        </tr>
+        
+        
+    }
+</table>

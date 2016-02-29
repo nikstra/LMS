@@ -1,7 +1,7 @@
 ﻿@model LMS.Models.Course
 
 <p>
-    @Html.ActionLink("Create Activity", "Create", "Courses")
+    @Html.ActionLink("Create Activity", "Create", "Activities")
 </p>
 
 <table class="table">
@@ -14,7 +14,7 @@
     @foreach (var activity in Model.Activities)
     {
         <tr>
-            <td>@Html.DisplayFor(modelItem => activity.Name)</td>
+            <td>@Html.ActionLink(activity.Name, "Details", "Activities", new { id = activity.Id }, null)</td>
             <td>@Html.DisplayFor(modelItem => activity.Description)</td>
             <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>

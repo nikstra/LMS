@@ -1,15 +1,15 @@
 ﻿@model LMS.Models.Course
 
 <p>
-    @Html.ActionLink("Create Activity", "Create", "Courses")
+    @Html.ActionLink("Skapa aktivitet", "Create", "Courses")
 </p>
 
 <table class="table">
     <tr>
-        <th>Activity Title</th>
-        <th>Description</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Typ</th>
+        <th>Beskrivning</th>
+        <th>Startdatum</th>
+        <th>Slutdatum</th>
     </tr>
     @foreach (var activity in Model.Activities)
     {
@@ -19,6 +19,10 @@
             <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
 
+            <td>
+                @Html.ActionLink("Redigera", "Edit", "Courses", new { id = Model.GroupId }, null) |
+                @Html.ActionLink("Radera", "Delete", "Courses", new { id = Model.GroupId }, null)
+            </td>
         </tr>
     }
 </table>

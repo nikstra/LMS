@@ -1,0 +1,10 @@
+﻿@*@model IEnumerable<LMS.Models.Group>*@
+@model IEnumerable<LMS.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Gruppmedlemmar";
+}
+
+<h2>Elever i gruppen: @ViewBag.GroupName</h2>
+
+@Html.Partial("_UsersInGroup", Model)

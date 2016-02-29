@@ -6,21 +6,17 @@
     {
         @Html.AntiForgeryToken()
 
-        string GroupName = "";
-        
-        var ActiveUser = new LMS.Models.ApplicationDbContext().Users.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
-        if (ActiveUser.Group != null)
-        {
-            GroupName = ActiveUser.Group.Name;
-        }
-
         <ul class="nav navbar-nav navbar-right">
             <li>
                 @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             <li>
-                @*<a name="#">@@ @GroupName</a>*@
-                <a name="#">@@ @{Html.RenderAction("GroupName", "Shared");}</a>
+                @{
+                    HtmlString name = Html.Action("GroupName", "Shared");
+                    @Html.ActionLink("@ " + name.ToString(), "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Grupp" });
+                }
+                @*@var n = @Html.RenderAction("GroupName", "Shared")*@
+                @*<a name="#">@@ @{Html.RenderAction("GroupName", "Shared");}</a>*@
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>

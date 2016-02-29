@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Models
 {
@@ -11,7 +12,13 @@ namespace LMS.Models
     {
         public int? GroupId { get; set; }
         public virtual Group Group { get; set; }
-        
+        [Display(Name = "Användarnamn")]
+        public override string UserName { get { return base.UserName; } set { base.UserName = value; } }
+        [Display(Name = "E-post")]
+        public override string Email { get { return base.Email; } set { base.Email = value; } }
+        [Display(Name = "Telefonnummer")]
+        public override string PhoneNumber { get { return base.PhoneNumber; } set { base.PhoneNumber = value; } }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -36,5 +43,9 @@ namespace LMS.Models
         {
             return new ApplicationDbContext();
         }
+
+        // This line was added when scaffolding the view for Groups.UsersInGroup() based on ApplicationUsers. This causes the following exception to be thrown:
+        // Multiple object sets per type are not supported. The object sets 'ApplicationUsers' and 'Users' can both contain instances of type 'LMS.Models.ApplicationUser'.
+        //public System.Data.Entity.DbSet<LMS.Models.ApplicationUser> ApplicationUsers { get; set; }
     }
 }

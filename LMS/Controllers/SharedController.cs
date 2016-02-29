@@ -29,9 +29,21 @@ namespace LMS.Controllers
                 .FirstOrDefault();
 
             if (activeUser.Group != null)
+            {
+                TempData["GroupId"] = activeUser.Group.Id;
                 return Content(activeUser.Group.Name);
+            }
 
             return Content("Ingen grupp");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

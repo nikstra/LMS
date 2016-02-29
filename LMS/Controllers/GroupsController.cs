@@ -115,6 +115,33 @@ namespace LMS.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Groups/UsersInGroup/3
+        public ActionResult UsersInGroup(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var usersInGroup = db.Users
+                .Where(u => u.GroupId == id) ?? null;
+
+            if(usersInGroup.Count() > 0)
+            {
+                ViewBag.GroupName = db.Groups
+                    .Where(g => g.Id == id)
+                    .FirstOrDefault()
+                    .Name;
+
+
+                ViewBag.RoleIsAdministrator = true;
+
+                return View(usersInGroup);
+            }
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

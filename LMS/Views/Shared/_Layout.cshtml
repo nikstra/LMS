@@ -25,9 +25,10 @@
                     <li>
                         @{
                             HtmlString name = Html.Action("GroupName", "Shared");
-                            @Html.ActionLink("Grupp", "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Grupp" });
+                            @Html.ActionLink("Grupp", "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
                         }
                     </li>
+                    <li>@Html.ActionLink("Gruppdeltagare", "UsersInGroup", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa grupplista" })</li>
                     <li>@Html.ActionLink("Om LMS", "About", "Home")</li>
                     <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
                 </ul>

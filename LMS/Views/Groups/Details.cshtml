@@ -4,7 +4,8 @@
     ViewBag.Title = "Details";
 }
 
-<h2>@Model.Name @Model.StartDate - @Model.EndDate</h2>
+<h2>@Html.DisplayFor(model => model.Name)</h2>
+<h4>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</h4>
 
 <hr />
 
@@ -20,8 +21,8 @@
     </dl>
 
     @Html.Partial("_CoursesInGroup")
-
-
+    
+    
 </div>
 
 <p>

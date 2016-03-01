@@ -262,7 +262,7 @@
     <Content Include="Views\Activities\Details.cshtml" />
     <Content Include="Views\Activities\Edit.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
-    <Content Include="Views\Groups\_UsersInGroup.cshtml" />
+    <Content Include="Views\Shared\_UsersInGroupPartial.cshtml" />
     <Content Include="Views\Groups\UsersInGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +274,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RandomLib\RandomLib.csproj">
+      <Project>{d5cbcec7-a57a-4afe-86cf-1f6ad2f98615}</Project>
+      <Name>RandomLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

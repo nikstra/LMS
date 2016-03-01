@@ -15,8 +15,10 @@ namespace LMS.Models
         [Display(Name = "Beskrivning")]
         public string Description { get; set; }
         [Display(Name = "Startdatum")]
+        [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [Display(Name = "Slutdatum")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         public int? CourseId { get; set; }

@@ -16,10 +16,12 @@ namespace LMS.Models
         [Display(Name = "Beskrivning")]
         public string   Description { get; set; }
 
-        [Display(Name = "Start datum")]
+        [Display(Name = "Startdatum")]
+        [DataType(DataType.Date)]
         public DateTime StartDate   { get; set; }
 
-        [Display(Name = "Slut datum")]
+        [Display(Name = "Slutdatum")]
+        [DataType(DataType.Date)]
         public DateTime EndDate    { get; set; }
 
 

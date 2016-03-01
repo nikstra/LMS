@@ -4,7 +4,7 @@
     ViewBag.Title = "Details";
 }
 
-<h2>@Model.Name @Model.StartDate - @Model.EndDate</h2>
+<h2>@Html.DisplayFor(model => model.Name) @Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</h2>
 
 <hr />
 

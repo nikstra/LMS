@@ -262,7 +262,7 @@
     <Content Include="Views\Activities\Details.cshtml" />
     <Content Include="Views\Activities\Edit.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
-    <Content Include="Views\Groups\_UsersInGroup.cshtml" />
+    <Content Include="Views\Shared\_UsersInGroupPartial.cshtml" />
     <Content Include="Views\Groups\UsersInGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>

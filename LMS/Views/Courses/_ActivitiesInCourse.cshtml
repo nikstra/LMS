@@ -20,8 +20,8 @@
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
 
             <td>
-                @Html.ActionLink("Redigera", "Edit", "Courses", new { id = Model.GroupId }, null) |
-                @Html.ActionLink("Radera", "Delete", "Courses", new { id = Model.GroupId }, null)
+                @Html.ActionLink("Redigera", "Edit", "Activities", new { id = activity.Id }, null) |
+                @Html.ActionLink("Radera", "Delete", "Activities", new { id = activity.Id }, null)
             </td>
         </tr>
     }

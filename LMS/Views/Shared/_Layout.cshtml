@@ -21,7 +21,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Hem", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Hem", "Index", "Home", null, htmlAttributes: new { title = "Till startsidan" })</li>
                     <li>
                         @{
                             HtmlString name = Html.Action("GroupName", "Shared");

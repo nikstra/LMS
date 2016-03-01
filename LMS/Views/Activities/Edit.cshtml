@@ -4,7 +4,7 @@
     ViewBag.Title = "Edit";
 }
 
-<h2>Redigera Aktivity</h2>
+<h2>Redigera Aktivitet</h2>
 
 
 @using (Html.BeginForm())
@@ -66,7 +66,7 @@
 }
 
 <div>
-    @Html.ActionLink("Tillbaka", "Index")
+    @Html.ActionLink("Tillbaka", "Details", "Courses", new { id = Model.CourseId }, null)
 </div>
 
 @section Scripts {

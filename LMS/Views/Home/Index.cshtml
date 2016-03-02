@@ -76,9 +76,20 @@
         @section Scripts {
             @Scripts.Render("~/bundles/jqueryval")
         }
+
         <footer class="text-center">
-            <p>&copy; @DateTime.Now.Year - Niklas, Robert, Oscar</p>
+            <br /><br />
+            <p>LMS är Lexicon Management System.<p/>
+            <p>Syftet med detta system är att ha en fullständig och ordnad kontroll över kurserna Lexicon erbjuder, liksom alla de lärare och elever som deltar i skapandet och deltagande av kurserna.</p>
+            <p>&copy; @DateTime.Now.Year - Lexicongruppen, Sveriges största kompetensutvecklare för företag.</p>
+            @*<p>@Html.ActionLink("Mer info om LMS", "About", "Home")</p>*@
         </footer>
+
+        @*<footer class="text-center">
+            <p>&copy; @DateTime.Now.Year - Niklas, Robert, Oscar</p>
+        </footer>*@
+
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")

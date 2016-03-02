@@ -3,7 +3,9 @@ namespace LMS.Migrations
     using LMS.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using RandomLib;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -21,34 +23,12 @@ namespace LMS.Migrations
         {
             //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-
-            //context.Groups.AddOrUpdate(
-            //    g => g.Name,
-            //    new Group { Name = ".NET September 2015", StartDate = new DateTime(2015,09,23), EndDate = new DateTime(2016,03,18), Description = "Systemutvecklarkurs...." }
-            //    );
-
-            //if (!context.Users.Any(u => u.UserName == "sune@gmail.com"))
-            //{
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
 
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
-            //    var user = new ApplicationUser { UserName = "sune@gmail.com" , GroupId = 4};
 
-
-
-            //manager.Create(user, "password");
             string roleName = "teacher";
             if (!roleManager.RoleExists(roleName))
                 roleManager.Create(new IdentityRole { Name = roleName });
@@ -63,52 +43,126 @@ namespace LMS.Migrations
             // http://devproconnections.com/development/solving-net-scalability-problem
             foreach (var user in context.Users.ToList())
             {
+                // Make all users that are not teachers, students.
                 if(!userManager.IsInRole(user.Id, "teacher"))
                     userManager.AddToRole(user.Id, "student");
             }
 
-            ApplicationUser newUser;
-            string userEmail = "principal.skinner@springfieldelementary.edu";
-            if (userManager.FindByEmail(userEmail) == null)
-            {
-                newUser = new ApplicationUser { UserName = "Seymore", Email = userEmail, FirstName = "Seymore", LastName = "Skinner" };
-                userManager.Create(newUser, "Abc_123");
-                userManager.AddToRole(newUser.Id, "teacher");
-            }
+            RandomGenerator randGen = new RandomGenerator();
+            AddStudents(userManager, randGen.People(100), context.Users.Count());
 
-            userEmail = "edna.krabappel@springfieldelementary.edu";
-            if (userManager.FindByEmail(userEmail) == null)
-            {
-                newUser = new ApplicationUser { UserName = "Edna", Email = userEmail, FirstName = "Edna", LastName = "Krabappel" };
-                userManager.Create(newUser, "Abc_123");
-                userManager.AddToRole(newUser.Id, "teacher");
-            }
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser {
+                    /*UserName = "Seymore",*/
+                    Email = "principal.skinner@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Seymore",
+                    LastName = "Skinner" },
+                "Abc_123",
+                "teacher"
+                );
 
-            userEmail = "superintendent.chalmers@springfieldelementary.edu";
-            if (userManager.FindByEmail(userEmail) == null)
-            {
-                newUser = new ApplicationUser { UserName = "Gary", Email = userEmail, FirstName = "Gary", LastName = "Chalmers" };
-                userManager.Create(newUser, "Abc_123");
-                userManager.AddToRole(newUser.Id, "teacher");
-            }
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser {
+                    /*UserName = "Edna",*/
+                    Email = "edna.krabappel@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Edna",
+                    LastName = "Krabappel" },
+                "Abc_123",
+                "teacher"
+                );
 
-            userEmail = "elizabeth.hoover@springfieldelementary.edu";
-            if (userManager.FindByEmail(userEmail) == null)
-            {
-                newUser = new ApplicationUser { UserName = "Elizabeth", Email = userEmail, FirstName = "Elizabeth", LastName = "Hoover" };
-                userManager.Create(newUser, "Abc_123");
-                userManager.AddToRole(newUser.Id, "teacher");
-            }
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser {
+                    /*UserName = "Gary",*/
+                    Email = "superintendent.chalmers@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Gary",
+                    LastName = "Chalmers" },
+                "Abc_123",
+                "teacher"
+                );
 
-            userEmail = "groundskeeper.willie@springfieldelementary.edu";
-            if (userManager.FindByEmail(userEmail) == null)
-            {
-                newUser = new ApplicationUser { UserName = "William", Email = userEmail, FirstName = "William", LastName = "MacDougal" };
-                userManager.Create(newUser, "Abc_123");
-                userManager.AddToRole(newUser.Id, "teacher");
-            }
-            //}
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser {
+                    /*UserName = "Elizabeth",*/
+                    Email = "elizabeth.hoover@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Elizabeth",
+                    LastName = "Hoover" },
+                "Abc_123",
+                "teacher"
+                );
 
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser {
+                    /*UserName = "William",*/
+                    Email = "groundskeeper.willie@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "William",
+                    LastName = "MacDougal" },
+                "Abc_123",
+                "teacher"
+                );
+        }
+
+        /// <summary>
+        /// Adds students.
+        /// </summary>
+        /// <param name="userManager">An instance of UserManager.</param>
+        /// <param name="studentNames">A List of first name / last name tuples.</param>
+        /// <param name="maxUserCount">Maxumum number of users you want in the database.</param>
+        private static void AddStudents(UserManager<ApplicationUser> userManager, List<Tuple<string, string>> studentNames, int maxUserCount)
+        {
+            // Don't seed if we already have users.
+            if(studentNames.Count() < maxUserCount)
+                return;
+
+            foreach (Tuple<string, string> studentName in studentNames)
+            {
+                AddOrUpdateUser(
+                    userManager,
+                    new ApplicationUser
+                    {
+                        /*UserName = studentName.Item1,*/
+                        Email = studentName.Item1 + "." + studentName.Item2 + "@springfieldelementary.edu",
+                        PhoneNumber = "070-123456",
+                        FirstName = studentName.Item1,
+                        LastName = studentName.Item2
+                    },
+                    "Abc_123",
+                    "student"
+                    );
+            }
+        }
+
+        /// <summary>
+        /// Add an ApplicationUser unless a user with the same email address already exist.
+        /// </summary>
+        /// <param name="userManager">An instance of a UserManager.</param>
+        /// <param name="newUser">An instance of the ApplicationUser to be created.</param>
+        /// <param name="password">A plain text password.</param>
+        /// <param name="role">The role for the new user.</param>
+        /// <returns></returns>
+        private static void AddOrUpdateUser(UserManager<ApplicationUser> userManager, ApplicationUser newUser, string password, string role)
+        {
+            // Set UserName to Email to get the same behaviour as in the AccountController.Register() method.
+            newUser.UserName = newUser.Email;
+
+            ApplicationUser appUser = userManager.FindByEmail(newUser.Email);
+
+            if (appUser == null)
+            {
+                IdentityResult result = userManager.Create(newUser, password);
+                if(result.Succeeded)
+                    userManager.AddToRole(newUser.Id, role);
+            }
         }
     }
 }

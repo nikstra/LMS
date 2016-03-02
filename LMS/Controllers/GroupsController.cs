@@ -10,14 +10,23 @@ using LMS.Models;
 
 namespace LMS.Controllers
 {
+    [Authorize]
     public class GroupsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Groups
+        
         public ActionResult Index()
         {
-            return View(db.Groups.ToList());
+            if (User.IsInRole("teacher"))
+            {
+                return View(db.Groups.ToList());
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
         }
 
         // GET: Groups/Details/5

@@ -28,7 +28,7 @@ namespace LMS.Controllers
                 .Where(u => u.UserName == User.Identity.Name)
                 .FirstOrDefault();
 
-            if (activeUser.Group != null)
+            if (activeUser != null && activeUser.Group != null)
             {
                 TempData["GroupId"] = activeUser.Group.Id;
                 return Content(activeUser.Group.Name);

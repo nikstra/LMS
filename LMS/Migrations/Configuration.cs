@@ -62,7 +62,10 @@ namespace LMS.Migrations
             // Setting "MultipleActiveResultSets=true" in the connection string is not a proper solution for this issue.
             // http://devproconnections.com/development/solving-net-scalability-problem
             foreach (var user in context.Users.ToList())
-                userManager.AddToRole(user.Id, "student");
+            {
+                if(!userManager.IsInRole(user.Id, "teacher"))
+                    userManager.AddToRole(user.Id, "student");
+            }
 
             ApplicationUser newUser;
             string userEmail = "principal.skinner@springfieldelementary.edu";

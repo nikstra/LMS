@@ -30,7 +30,7 @@
                     </li>
                     <li>@Html.ActionLink("Gruppdeltagare", "UsersInGroup", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa grupplista" })</li>
                     <li>@Html.ActionLink("Om LMS", "About", "Home")</li>
-                    <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

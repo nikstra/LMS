@@ -18,6 +18,10 @@ namespace LMS.Models
         public override string Email { get { return base.Email; } set { base.Email = value; } }
         [Display(Name = "Telefonnummer")]
         public override string PhoneNumber { get { return base.PhoneNumber; } set { base.PhoneNumber = value; } }
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

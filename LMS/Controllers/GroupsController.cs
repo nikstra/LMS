@@ -30,6 +30,7 @@ namespace LMS.Controllers
         }
 
         // GET: Groups/Details/5
+        
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -41,6 +42,12 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
+            if (User.IsInRole("teacher"))
+            {
+                ViewData["Authorized"] = true;
+                return View(group);
+            }
+            else
             return View(group);
         }
 

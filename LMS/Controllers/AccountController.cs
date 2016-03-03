@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LMS.Models;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace LMS.Controllers
 {
@@ -17,6 +19,79 @@ namespace LMS.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+
+        public ActionResult UserList()
+        {
+
+            var userList = new List<UserViewModel>();
+            foreach (var user in db.Users.ToList())
+            {
+                var userRolesId = user.Roles.Select(m => m.RoleId).ToList();
+                //var name = db.Roles.Where(r => userRolesId.Contains(r.Id));
+                var model = new UserViewModel()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name
+                                    
+                };
+                userList.Add(model);
+            }
+
+            return View(userList);
+
+
+
+
+            //var allusers = db.Users.ToList();
+            //var users = allusers.Where(x => x.Roles.Select(role => role).Contains("User")).ToList();
+            //var userVM = users.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
+
+            //var admins = allusers.Where(x => x.Roles.Select(role => role.Name).Contains("Admin")).ToList();
+            //var adminsVM = admins.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
+            //var model = new GroupedUserViewModel { Users = userVM, Admins = adminsVM };
+
+            //return View(model);
+
+            //var userList = new List<UserViewModel>();
+            //var applicationDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
+            //var users = from u in db.Users
+            //            from ur in u.Roles
+            //            join r in db.Roles on ur.RoleId equals r.Id
+            //            select new
+            //            {
+            //                FirstName = u.FirstName,
+            //                LastName = u.LastName,
+            //                Email = u.Email,
+            //                PhoneNumber = u.PhoneNumber,
+            //                RoleName = r.Name,
+            //            };
+
+            
+            //userList.Add(users);
+            //var usersWithRole = users.ToArray();
+
+            //IEnumerable<UserViewModel> usersWithRole = users;
+           
+            //var users = db.Users
+            //    .Join(
+            //    db.Roles,
+            //    u => u.Id,
+            //    r => r.,
+            //    (u, r) => new { u }
+            //    )
+            //    .GroupBy(r => u.r)
+
+            //    .Select(r => new {  })
+
+
+            // users is anonymous type, map it to a Model 
+            //return View();
+        }
 
         public AccountController()
         {

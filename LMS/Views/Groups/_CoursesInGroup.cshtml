@@ -17,10 +17,13 @@
             <td>@Html.DisplayFor(modelItem => course.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => course.EndDate)</td>
 
+            @if (ViewBag.Authorized == true)
+            { 
             <td>
                 @Html.ActionLink("Redigera", "Edit", "Courses", new { id = course.Id }, null) |
                 @Html.ActionLink("Radera", "Delete", "Courses", new { id = course.Id }, null)
             </td>
+            }
         </tr>
         
         

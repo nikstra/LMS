@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<LMS.Models.ApplicationUser>
 
-@if(ViewBag.RoleIsAdministrator != null)
+@if(ViewBag.IsAdministrator != null)
 {
     <p>
         @Html.ActionLink("Skapa användare", "Register", "Account")
@@ -23,7 +23,7 @@
         <th>
             @Html.DisplayNameFor(model => model.Email)
         </th>
-        @if(ViewBag.RoleIsAdministrator != null)
+        @if(ViewBag.IsAdministrator != null)
         {
             <th>
                 @Html.DisplayNameFor(model => model.PhoneNumber)
@@ -49,7 +49,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.Email)
         </td>
-        @if(ViewBag.RoleIsAdministrator != null)
+        @if(ViewBag.IsAdministrator != null)
         {
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)

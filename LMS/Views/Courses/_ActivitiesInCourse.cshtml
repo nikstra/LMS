@@ -1,9 +1,10 @@
 ﻿@model LMS.Models.Course
-
-<p>
-    @Html.ActionLink("Skapa aktivitet", "Create", "Activities")
-</p>
-
+@if (ViewBag.IsAdministrator == true)
+{
+    <p>
+        @Html.ActionLink("Skapa aktivitet", "Create", "Activities", new { CourseId = Model.Id }, null)
+    </p>
+}
 <table class="table">
     <tr>
         <th>Namn</th>

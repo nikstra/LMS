@@ -6,7 +6,7 @@
 
 <h2>Skapa Aktivitet</h2>
 
-
+@Html.HiddenFor(model => model.CourseId)
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()

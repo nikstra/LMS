@@ -47,9 +47,13 @@ namespace LMS.Controllers
 
         // GET: Courses/Create
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public ActionResult Create()
+        public ActionResult Create(int GroupId)
         {
-            return View();
+            Course course = new Course();
+            course.GroupId = GroupId;
+            course.StartDate = DateTime.Now;
+            course.EndDate = DateTime.Now;
+            return View(course);
         }
 
         // POST: Courses/Create
@@ -64,7 +68,7 @@ namespace LMS.Controllers
             {
                 db.Courses.Add(course);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Groups", new { id = course.GroupId });
             }
 
             return View(course);
@@ -128,7 +132,7 @@ namespace LMS.Controllers
             Course course = db.Courses.Find(id);
             db.Courses.Remove(course);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Groups", new { id = course.GroupId });
         }
 
         protected override void Dispose(bool disposing)

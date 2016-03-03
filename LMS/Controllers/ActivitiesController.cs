@@ -51,10 +51,14 @@ namespace LMS.Controllers
 
         // GET: Activities/Create
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public ActionResult Create()
+        public ActionResult Create(int CourseId)
         {
-            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name");
-            return View();
+            Activity activity = new Activity();
+            activity.CourseId = CourseId;
+            activity.StartDate = DateTime.Now;
+            activity.EndDate = DateTime.Now;
+            //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name");
+            return View(activity);
         }
 
         // POST: Activities/Create
@@ -69,10 +73,10 @@ namespace LMS.Controllers
             {
                 db.Activities.Add(activity);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
 
-            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
+            //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
 
@@ -136,7 +140,7 @@ namespace LMS.Controllers
             Activity activity = db.Activities.Find(id);
             db.Activities.Remove(activity);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
         }
 
         protected override void Dispose(bool disposing)

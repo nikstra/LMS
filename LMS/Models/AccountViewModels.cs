@@ -77,7 +77,7 @@ namespace LMS.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Bekräfta lösenord")]
-        [Compare("Lösenord", ErrorMessage = "Lösenordet och bekräftelselösenordet matchar inte.")]
+        [Compare("Password", ErrorMessage = "Lösenordet och bekräftelselösenordet matchar inte.")]
         public string ConfirmPassword { get; set; }
     }
 

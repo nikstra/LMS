@@ -25,7 +25,7 @@ namespace LMS.Models
         public DateTime EndDate     { get; set; }
 
         public int      GroupId     { get; set; }
-        public int      ActivityId  { get; set; }
+        public int?      ActivityId  { get; set; }
 
         public virtual Group Group { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }

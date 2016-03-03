@@ -7,26 +7,21 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LMS.Models;
+using LMS.Constants;
 
 namespace LMS.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
     public class GroupsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Groups
         
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Index()
         {
-            if (User.IsInRole("teacher"))
-            {
                 return View(db.Groups.ToList());
-            }
-            else
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
         }
 
         // GET: Groups/Details/5
@@ -42,7 +37,7 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
-            if (User.IsInRole("teacher"))
+            if (User.IsInRole(LMSConstants.RoleTeacher))
             {
                 ViewData["Authorized"] = true;
                 return View(group);
@@ -52,6 +47,7 @@ namespace LMS.Controllers
         }
 
         // GET: Groups/Create
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Create()
         {
             return View();
@@ -75,6 +71,7 @@ namespace LMS.Controllers
         }
 
         // GET: Groups/Edit/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -94,6 +91,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,ApplicationUserId")] Group group)
         {
             if (ModelState.IsValid)
@@ -106,6 +104,7 @@ namespace LMS.Controllers
         }
 
         // GET: Groups/Delete/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -123,6 +122,7 @@ namespace LMS.Controllers
         // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult DeleteConfirmed(int id)
         {
             Group group = db.Groups.Find(id);
@@ -132,6 +132,7 @@ namespace LMS.Controllers
         }
 
         // GET: Groups/UsersInGroup/3
+        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
         public ActionResult UsersInGroup(int? id)
         {
             if (id == null)

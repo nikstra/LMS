@@ -1,5 +1,6 @@
 namespace LMS.Migrations
 {
+    using LMS.Constants;
     using LMS.Models;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
@@ -29,13 +30,11 @@ namespace LMS.Migrations
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
-            string roleName = "teacher";
-            if (!roleManager.RoleExists(roleName))
-                roleManager.Create(new IdentityRole { Name = roleName });
+            if (!roleManager.RoleExists(LMSConstants.RoleTeacher))
+                roleManager.Create(new IdentityRole { Name = LMSConstants.RoleTeacher });
 
-            roleName = "student";
-            if (!roleManager.RoleExists(roleName))
-                roleManager.Create(new IdentityRole { Name = roleName });
+            if (!roleManager.RoleExists(LMSConstants.RoleStudent))
+                roleManager.Create(new IdentityRole { Name = LMSConstants.RoleStudent });
 
             // Make sure to call ToList() to get a copy of users in memory, otherwise you'll get the following exception:
             //      System.InvalidOperationException: There is already an open DataReader associated with this Command which must be closed first.
@@ -44,8 +43,8 @@ namespace LMS.Migrations
             foreach (var user in context.Users.ToList())
             {
                 // Make all users that are not teachers, students.
-                if(!userManager.IsInRole(user.Id, "teacher"))
-                    userManager.AddToRole(user.Id, "student");
+                if(!userManager.IsInRole(user.Id, LMSConstants.RoleTeacher))
+                    userManager.AddToRole(user.Id, LMSConstants.RoleStudent);
             }
 
             RandomGenerator randGen = new RandomGenerator();
@@ -60,7 +59,7 @@ namespace LMS.Migrations
                     FirstName = "Seymore",
                     LastName = "Skinner" },
                 "Abc_123",
-                "teacher"
+                LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
@@ -72,7 +71,7 @@ namespace LMS.Migrations
                     FirstName = "Edna",
                     LastName = "Krabappel" },
                 "Abc_123",
-                "teacher"
+                LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
@@ -84,7 +83,7 @@ namespace LMS.Migrations
                     FirstName = "Gary",
                     LastName = "Chalmers" },
                 "Abc_123",
-                "teacher"
+                LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
@@ -96,7 +95,7 @@ namespace LMS.Migrations
                     FirstName = "Elizabeth",
                     LastName = "Hoover" },
                 "Abc_123",
-                "teacher"
+                LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
@@ -108,7 +107,7 @@ namespace LMS.Migrations
                     FirstName = "William",
                     LastName = "MacDougal" },
                 "Abc_123",
-                "teacher"
+                LMSConstants.RoleTeacher
                 );
         }
 
@@ -137,7 +136,7 @@ namespace LMS.Migrations
                         LastName = studentName.Item2
                     },
                     "Abc_123",
-                    "student"
+                    LMSConstants.RoleStudent
                     );
             }
         }

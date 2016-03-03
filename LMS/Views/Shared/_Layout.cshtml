@@ -25,10 +25,28 @@
                     <li>
                         @{
                             HtmlString name = Html.Action("GroupName", "Shared");
-                            @Html.ActionLink("Grupp", "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
+                            if (TempData["IsAdministrator"] != null)
+                            {
+                                @Html.ActionLink("Grupper", "Index", "Groups", null, htmlAttributes: new { title = "Visa grupper" });
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Grupp", "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
+                            }
                         }
                     </li>
-                    <li>@Html.ActionLink("Gruppdeltagare", "UsersInGroup", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa grupplista" })</li>
+                    <li>
+                        @{
+                            if (TempData["IsAdministrator"] != null)
+                            {
+                                @Html.ActionLink("Elever", "UserList", "Account", null, htmlAttributes: new { title = "Visa elevlista" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Gruppdeltagare", "UsersInGroup", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa grupplista" })
+                            }
+                        }
+                    </li>
                     <li>@Html.ActionLink("Om LMS", "About", "Home")</li>
                     @*<li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>*@
                 </ul>

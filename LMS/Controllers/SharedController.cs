@@ -1,4 +1,5 @@
-﻿using LMS.Models;
+﻿using LMS.Constants;
+using LMS.Models;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -27,6 +28,9 @@ namespace LMS.Controllers
             var activeUser = db.Users
                 .Where(u => u.UserName == User.Identity.Name)
                 .FirstOrDefault();
+
+            if (User.IsInRole(LMSConstants.RoleTeacher))
+                TempData["IsAdministrator"] = true;
 
             if (activeUser != null && activeUser.Group != null)
             {

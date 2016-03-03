@@ -13,7 +13,10 @@
             <li>
                 @{
                     HtmlString name = Html.Action("GroupName", "Shared");
-                    @Html.ActionLink("@ " + name.ToString(), "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
+                    if (TempData["IsAdministrator"] == null)
+                    {
+                        @Html.ActionLink("@ " + name.ToString(), "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
+                    }
                 }
                 @*@var n = @Html.RenderAction("GroupName", "Shared")*@
                 @*<a name="#">@@ @{Html.RenderAction("GroupName", "Shared");}</a>*@

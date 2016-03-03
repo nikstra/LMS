@@ -1,27 +1,47 @@
-﻿using System;
+﻿using LMS.Constants;
+using LMS.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using LMS.Models;
 
 namespace LMS.Controllers
 {
+    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
     public class ActivitiesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Activities
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Index()
         {
+#if DEBUG
+            var userStore = new UserStore<ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if(activeUser != null)
+            {
+                Debug.Print("Is in role teacher: " + userManager.IsInRole(activeUser.Id, LMSConstants.RoleTeacher));
+            }
+#endif
+
             var activities = db.Activities.Include(a => a.Course);
             return View(activities.ToList());
         }
 
         // GET: Activities/Details/5
+        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +57,7 @@ namespace LMS.Controllers
         }
 
         // GET: Activities/Create
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Create()
         {
             ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name");
@@ -48,6 +69,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Activity activity)
         {
             if (ModelState.IsValid)
@@ -62,6 +84,7 @@ namespace LMS.Controllers
         }
 
         // GET: Activities/Edit/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +105,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Activity activity)
         {
             if (ModelState.IsValid)
@@ -95,6 +119,7 @@ namespace LMS.Controllers
         }
 
         // GET: Activities/Delete/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +137,7 @@ namespace LMS.Controllers
         // POST: Activities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult DeleteConfirmed(int id)
         {
             Activity activity = db.Activities.Find(id);

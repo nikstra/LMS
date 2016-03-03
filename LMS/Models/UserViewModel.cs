@@ -19,7 +19,6 @@ namespace LMS.Models
         public string PhoneNumber { get; set; }
         [Display(Name = "Roll")]
         public string RoleName { get; set; }
-        public List<IdentityRole> Roles { get; set; }
     }
 
 

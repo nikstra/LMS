@@ -19,10 +19,13 @@
             <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
 
-            <td>
-                @Html.ActionLink("Redigera", "Edit", "Activities", new { id = activity.Id }, null) |
-                @Html.ActionLink("Radera", "Delete", "Activities", new { id = activity.Id }, null)
-            </td>
+            @if (ViewBag.Authorized == true)
+            {
+                <td>
+                    @Html.ActionLink("Redigera", "Edit", "Activities", new { id = activity.Id }, null) |
+                    @Html.ActionLink("Radera", "Delete", "Activities", new { id = activity.Id }, null)
+                </td>
+            }
         </tr>
     }
 </table>

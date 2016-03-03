@@ -23,18 +23,7 @@ namespace LMS.Controllers
         [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Index()
         {
-#if DEBUG
-            var userStore = new UserStore<ApplicationUser>(db);
-            var userManager = new UserManager<ApplicationUser>(userStore);
-            var activeUser = db.Users
-                .Where(u => u.UserName == User.Identity.Name)
-                .FirstOrDefault();
-
-            if(activeUser != null)
-            {
-                Debug.Print("Is in role teacher: " + userManager.IsInRole(activeUser.Id, LMSConstants.RoleTeacher));
-            }
-#endif
+            Debug.Print("Is in role teacher: " + User.IsInRole(LMSConstants.RoleTeacher));
 
             var activities = db.Activities.Include(a => a.Course);
             return View(activities.ToList());
@@ -48,6 +37,10 @@ namespace LMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            if(User.IsInRole(LMSConstants.RoleTeacher))
+                ViewBag.IsAdministrator = true;
+
             Activity activity = db.Activities.Find(id);
             if (activity == null)
             {

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using LMS.Models;
+using LMS.Constants;
 
 namespace LMS.Controllers
 {
@@ -150,7 +151,8 @@ namespace LMS.Controllers
                     .Name;
 
 
-                ViewBag.RoleIsAdministrator = true;
+                if(User.IsInRole(LMSConstants.RoleTeacher))
+                    ViewBag.IsAdministrator = true;
 
                 return View(usersInGroup);
             }

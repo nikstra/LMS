@@ -1,9 +1,10 @@
 ﻿@model LMS.Models.Group
-
-<p>
-    @Html.ActionLink("Lägg till en ny Kurs", "Create", "Courses")
-</p>
-
+@if (ViewBag.IsAdministrator == true)
+{
+    <p>
+        @Html.ActionLink("Lägg till en ny Kurs", "Create", "Courses", new { GroupId = Model.Id }, null)
+    </p>
+}
 <table class="table">
     <tr>
         <th>Kursnamn</th>
@@ -18,14 +19,14 @@
             <td>@Html.DisplayFor(modelItem => course.EndDate)</td>
 
             @if (ViewBag.IsAdministrator == true)
-            { 
-            <td>
-                @Html.ActionLink("Redigera", "Edit", "Courses", new { id = course.Id }, null) |
-                @Html.ActionLink("Radera", "Delete", "Courses", new { id = course.Id }, null)
-            </td>
+            {
+                <td>
+                    @Html.ActionLink("Redigera", "Edit", "Courses", new { id = course.Id }, null) |
+                    @Html.ActionLink("Radera", "Delete", "Courses", new { id = course.Id }, null)
+                </td>
             }
         </tr>
-        
-        
+
+
     }
 </table>

@@ -5,7 +5,7 @@
 }
 
 <h2>Skapa Kurs</h2>
-
+@Html.HiddenFor(model => model.GroupId)
 
 @using (Html.BeginForm())
 {
@@ -47,25 +47,25 @@
             </div>
         </div>
 
-        @*<div class="form-group">
+       @*<div class="form-group">
                 @Html.LabelFor(model => model.GroupId, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.EditorFor(model => model.GroupId, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.ActivityId, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.ActivityId, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
-                </div>
+                    @Html.DisplayFor(model => model.GroupId, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @*@Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })*@
+                @*</div>
             </div>*@
+@*
+    <div class="form-group">
+        @Html.LabelFor(model => model.ActivityId, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ActivityId, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Spara" class="btn btn-default" />
+                <input type="submit" value="Skapa" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -73,7 +73,7 @@
 }
 
 <div>
-    @Html.ActionLink("Tillbaka", "Details", "Groups")
+    @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId}, null)
 </div>
 
 @section Scripts {

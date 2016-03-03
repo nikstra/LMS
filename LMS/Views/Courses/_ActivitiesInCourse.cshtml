@@ -19,7 +19,7 @@
             <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
 
-            @if (ViewBag.Authorized == true)
+            @if (ViewBag.IsAdministrator == true)
             {
                 <td>
                     @Html.ActionLink("Redigera", "Edit", "Activities", new { id = activity.Id }, null) |

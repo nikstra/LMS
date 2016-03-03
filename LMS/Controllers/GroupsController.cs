@@ -39,7 +39,7 @@ namespace LMS.Controllers
             }
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
-                ViewData["Authorized"] = true;
+                ViewBag.IsAdministrator = true;
                 return View(group);
             }
             else

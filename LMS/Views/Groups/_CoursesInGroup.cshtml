@@ -17,7 +17,7 @@
             <td>@Html.DisplayFor(modelItem => course.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => course.EndDate)</td>
 
-            @if (ViewBag.Authorized == true)
+            @if (ViewBag.IsAdministrator == true)
             { 
             <td>
                 @Html.ActionLink("Redigera", "Edit", "Courses", new { id = course.Id }, null) |

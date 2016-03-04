@@ -1,4 +1,15 @@
-﻿@{
-    // Do not use _Layout.cshtml for the startpage.
-    Layout = (Request.Path == "/" || Request.Path == "/Home/Index") ? null : "~/Views/Shared/_Layout.cshtml";
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated) {
+
+        //(Request.Path == "/" || Request.Path == "/Home/Index") ? null :
+        // Do not use _Layout.cshtml for the startpage.
+        Layout =  "~/Views/Shared/_Layout.cshtml";
+
+    }
+else
+{
+    Layout = "~/Views/Shared/_NoLayout.cshtml";
 }
+
+

@@ -17,11 +17,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("LMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("LMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand">
+                    <img src="~/Img/logo-lexicon@2x.gif" title="Till startsidan" alt="Till startsidan" id="logo"/>
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Hem", "Index", "Home", null, htmlAttributes: new { title = "Till startsidan" })</li>
+                    @*<li>@Html.ActionLink("Hem", "Index", "Home", null, htmlAttributes: new { title = "Till startsidan" })</li>*@
                     <li>
                         @{
                             HtmlString name = Html.Action("GroupName", "Shared");

@@ -6,11 +6,11 @@
 
 <h2>Skapa Aktivitet</h2>
 
-@Html.HiddenFor(model => model.CourseId)
+
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+    @Html.HiddenFor(model => model.CourseId)
     <div class="form-horizontal">
 
         <hr />
@@ -67,8 +67,8 @@
 }
 
 <div>
-    @Html.ActionLink("Tillbaka", "Index")
-    @*@Html.ActionLink("Tillbaka", "Details", "Courses", new { id = Model.CourseId }, null)*@
+    @*@Html.ActionLink("Tillbaka", "Index")*@
+    @Html.ActionLink("Tillbaka", "Details", "Courses", new { id = Model.CourseId }, null)
 </div>
 
 @section Scripts {

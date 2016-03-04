@@ -93,7 +93,7 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
+            //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
 
@@ -109,9 +109,9 @@ namespace LMS.Controllers
             {
                 db.Entry(activity).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
-            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
+            //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
 

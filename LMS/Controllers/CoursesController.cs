@@ -83,6 +83,7 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Course course = db.Courses.Find(id);
+            
             if (course == null)
             {
                 return HttpNotFound();
@@ -102,7 +103,7 @@ namespace LMS.Controllers
             {
                 db.Entry(course).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "Groups", new { id = course.GroupId });
             }
             return View(course);
         }

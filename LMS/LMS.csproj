@@ -267,6 +267,7 @@
     <Content Include="Views\Shared\_UsersInGroupPartial.cshtml" />
     <Content Include="Views\Groups\UsersInGroup.cshtml" />
     <Content Include="Views\Account\UserList.cshtml" />
+    <Content Include="Views\Home\Student.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

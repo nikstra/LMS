@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using LMS.Constants;
 
 namespace LMS.Controllers
 {
@@ -32,13 +33,21 @@ namespace LMS.Controllers
         public ActionResult Index()
         {
             // Temporarly using the about page as start page for authenticated users.
-            ViewBag.ReturnUrl = "/Home/Student";
+            ViewBag.ReturnUrl = "/Home/Index";
+
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole(LMSConstants.RoleTeacher))
+                    return RedirectToAction("Index", "Groups");
+                else
+                    return RedirectToAction("Student", "Home");
+            }
+            return View();
 
             // If user already authenticated, redirect to start page.
-            if (User.Identity.IsAuthenticated)
-                return Redirect(ViewBag.ReturnUrl);
-
-            return View();
+            //if (User.Identity.IsAuthenticated)
+            //    return Redirect(ViewBag.ReturnUrl);
+            //return View();
         }
 
         public ActionResult About()

@@ -10,6 +10,9 @@ namespace LMS.Models
     {
         public int      Id          { get; set; }
 
+        [Display(Name = "Typ")]
+        public ActivityType Type { get; set; }
+
         [Display(Name = "Namn")]
         public string Name { get; set; }
 

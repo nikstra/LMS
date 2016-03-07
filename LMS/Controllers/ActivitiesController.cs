@@ -57,7 +57,7 @@ namespace LMS.Controllers
             activity.CourseId = CourseId;
             activity.StartDate = DateTime.Now;
             activity.EndDate = DateTime.Now;
-            //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name");
+            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             return View(activity);
         }
 
@@ -75,7 +75,7 @@ namespace LMS.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
-
+            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
@@ -93,6 +93,7 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
@@ -111,6 +112,7 @@ namespace LMS.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
+            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }

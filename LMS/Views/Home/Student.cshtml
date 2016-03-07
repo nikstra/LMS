@@ -6,9 +6,10 @@
 }
 <p></p>
 <div class="container">
-    <div class="well">
-        <h2>Startsida</h2>
-    </div>
+    <div class="row">
+        <div class="well">
+            <h2>Startsida</h2>
+        </div>
         <div class="col-md-7 well">
             <h4>Kommande aktiviteter</h4>
             <table class="table">
@@ -32,51 +33,55 @@
                             @Html.ActionLink(item.Name, "Details", "Activities", new { id = item.Id }, null)
                         </td>
                         @*<td>
-                            @Html.DisplayFor(modelItem => item.Course.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                                @Html.DisplayFor(modelItem => item.EndDate)
-                        </td>*@
+                                @Html.DisplayFor(modelItem => item.Course.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                    @Html.DisplayFor(modelItem => item.EndDate)
+                            </td>*@
                     </tr>
                 }
 
             </table>
-    </div>
-    <div class="col-md-4 col-md-offset-1 well">
-        <h4>Gruppdeltagare</h4>
-        @*http://www.tutorialspark.com/twitterBootstrap/TwitterBootstrap_Collapsible_Accordion.php*@
-        <div class="panel-group" id="accordion">
-            @{int i = 0;}
-            @foreach (var user in (IQueryable<ApplicationUser>)TempData["ApplicationUsers"])
-            {
-                i++;
+        </div>
+        <div class="col-md-4 col-md-offset-1 well">
+            <h4>Gruppdeltagare</h4>
+            <div id="user-list">
+                @*http://www.tutorialspark.com/twitterBootstrap/TwitterBootstrap_Collapsible_Accordion.php*@
+                <div class="panel-group" id="accordion">
+                    @{int i = 0;}
+                    @foreach (var user in (IQueryable<ApplicationUser>)TempData["ApplicationUsers"])
+                    {
+                        i++;
                 <!-- accordion 1 -->
-                <div class="panel panel-primary">
+                        <div class="panel panel-primary">
 
-                    <div class="panel-heading">
-                        <!-- panel-heading -->
-                        <h4 class="panel-title">
-                            <!-- title 1 -->
-                            <a data-toggle="collapse" data-parent="#accordion" href=@string.Format("#accordion{0}", i)>
-                                @Html.DisplayFor(modelItem => user.FirstName)&nbsp;@Html.DisplayFor(modelItem => user.LastName)
-                            </a>
-                        </h4>
-                    </div>
-                    <!-- panel body -->
-                    <div id=@string.Format("accordion{0}", i) class="panel-collapse collapse">
-                        <div class="panel-body">
-                            @Html.Hyperlink(string.Format("mailto:{0}", user.Email), user.Email)
+                            <div class="panel-heading">
+                                <!-- panel-heading -->
+                                <h4 class="panel-title">
+                                    <!-- title 1 -->
+                                    <a data-toggle="collapse" data-parent="#accordion" href=@string.Format("#accordion{0}", i)>
+                                        @Html.DisplayFor(modelItem => user.FirstName)&nbsp;@Html.DisplayFor(modelItem => user.LastName)
+                                    </a>
+                                </h4>
+                            </div>
+                            <!-- panel body -->
+                            <div id=@string.Format("accordion{0}", i) class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    @Html.Hyperlink(string.Format("mailto:{0}", user.Email), user.Email)
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            }
+                    }
 
-            @*<h4>Gruppdeltagare</h4>*@
-            @*@model IEnumerable<lms.models.applicationuser>*@
-            @*@{Html.RenderAction("UsersInGroup", "Groups");}*@
-            @*@Html.Partial("_UsersInGroupPartial", TempData["ApplicationUsers"])*@
+                    @*<h4>Gruppdeltagare</h4>*@
+                    @*@model IEnumerable<lms.models.applicationuser>*@
+                    @*@{Html.RenderAction("UsersInGroup", "Groups");}*@
+                    @*@Html.Partial("_UsersInGroupPartial", TempData["ApplicationUsers"])*@
+                </div>
+            </div>
         </div>
     </div>
+</div>

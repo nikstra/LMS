@@ -274,6 +274,7 @@
     <Content Include="Views\Account\UserList.cshtml" />
     <Content Include="Views\Home\Student.cshtml" />
     <Content Include="Views\Shared\_NoLayout.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Enum.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

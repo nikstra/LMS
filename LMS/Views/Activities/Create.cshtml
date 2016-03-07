@@ -1,4 +1,5 @@
 ﻿@model LMS.Models.Activity
+@using LMS.Models
 
 @{
     ViewBag.Title = "Create";
@@ -15,10 +16,15 @@
 
         <hr />
 
+        @*@Html.DropDownList("MyType",
+   EnumHelper.GetSelectList(typeof(MyType)),
+   "Select My Type",
+   new { @class = "form-control" })*@
+
         <div class="form-group">
-            @Html.LabelFor(model => model.Type, "Type", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Type, "Typ", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("Type", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("Type", EnumHelper.GetSelectList(typeof(ActivityType)), htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
             </div>
         </div>

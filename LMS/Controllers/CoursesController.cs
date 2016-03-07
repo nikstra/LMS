@@ -131,9 +131,17 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
-            db.SaveChanges();
-            return RedirectToAction("Details", "Groups", new { id = course.GroupId });
+            if (course.Activities.Any(a => a.CourseId == course.Id))
+            {
+                ViewBag.Error = "Kan inte radera - aktiviteter finns i kurs";
+                return View(course);
+            }
+            else
+            {
+                db.Courses.Remove(course);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Groups", new { id = course.GroupId });
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -47,9 +47,11 @@ namespace LMS.Migrations
                     userManager.AddToRole(user.Id, LMSConstants.RoleStudent);
             }
 
+            // Generate and add some students
             RandomGenerator randGen = new RandomGenerator();
             AddStudents(userManager, randGen.People(100), context.Users.Count());
 
+            // Add a couple of teachers.
             AddOrUpdateUser(
                 userManager,
                 new ApplicationUser {
@@ -108,6 +110,32 @@ namespace LMS.Migrations
                     LastName = "MacDougal" },
                 "Abc_123",
                 LMSConstants.RoleTeacher
+                );
+
+            // Fails with: Unable to determine the principal end of the 'LMS.Models.Group_Courses' relationship. Multiple added entities may have the same primary key.
+            // Add some groups (classes)
+            DateTime groupStartDate = DateTime.Now.AddDays(5);
+            DateTime groupEndDate = groupStartDate.AddMonths(3);
+            Group group = new Group { Name = ".Net Februari 2016", Description = "Webbutveckling med C# .NET.", StartDate = groupStartDate, EndDate = groupEndDate };
+            context.Groups.AddOrUpdate(g => g.Name,group);
+
+            DateTime courseStartDate = groupStartDate;
+            DateTime courseEndDate = courseStartDate.AddDays(5);
+            Course course = new Course { Name = "C# grunder", Description = "Grundläggande programmering i C#", StartDate = courseStartDate, EndDate = courseEndDate, GroupId = group.Id };
+            context.Courses.AddOrUpdate(c => c.Name, course);
+
+            courseStartDate = courseEndDate;
+            courseEndDate = courseStartDate.AddDays(5);
+            course = new Course { Name = "Linq och databas", Description = "Grunderna i Link och databaser", StartDate = courseStartDate, EndDate = courseEndDate, GroupId = group.Id };
+            context.Courses.AddOrUpdate(c => c.Name, course);
+
+
+            groupStartDate = groupEndDate.AddDays(7);
+            groupEndDate = groupStartDate.AddMonths(3);
+            group = new Group { Name = ".Net Juni 2016", Description = "Webbutveckling med C# .NET.", StartDate = groupStartDate, EndDate = groupEndDate };
+            context.Groups.AddOrUpdate(
+                g => g.Name,
+                group
                 );
         }
 

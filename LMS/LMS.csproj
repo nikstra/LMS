@@ -172,6 +172,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ActivityType.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\Activity.cs" />
     <Compile Include="Models\IdentityModels.cs" />

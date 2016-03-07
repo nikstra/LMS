@@ -32,7 +32,7 @@ namespace LMS.Controllers
         public ActionResult Index()
         {
             // Temporarly using the about page as start page for authenticated users.
-            ViewBag.ReturnUrl = "/Home/About";
+            ViewBag.ReturnUrl = "/Home/Student";
 
             // If user already authenticated, redirect to start page.
             if (User.Identity.IsAuthenticated)

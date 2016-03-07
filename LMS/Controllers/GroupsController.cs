@@ -126,9 +126,17 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Group group = db.Groups.Find(id);
-            db.Groups.Remove(group);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (group.Courses.Any(c => c.GroupId == group.Id))
+            {
+                ViewBag.Error = "Kan inte radera - kurser finns i grupp";
+                return View(group);
+            }
+            else
+            {
+                db.Groups.Remove(group);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Groups/UsersInGroup/3

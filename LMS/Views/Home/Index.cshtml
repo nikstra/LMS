@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <section id="loginForm">
-                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal" }))
                     {
                         @Html.AntiForgeryToken()
                         <div class="text-center">
@@ -79,7 +79,7 @@
 
         <footer class="text-center">
             <br /><br />
-            <p>LMS är Learning Management System.<p/>
+            <p>LMS är Learning Management System.</p>
             <p>Syftet med detta system är att ha en fullständig och ordnad kontroll över kurserna Lexicon erbjuder, liksom alla de lärare och elever som deltar i skapandet och deltagande av kurserna.</p>
             <p>&copy; @DateTime.Now.Year - Niklas, Robert, Oscar</p>
             @*<p>@Html.ActionLink("Mer info om LMS", "About", "Home")</p>*@

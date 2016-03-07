@@ -71,19 +71,3 @@ textarea {
     width: auto;
     height: 40px;
 }
-
-/* Make all Bootstrap columns the same height
-************************************************************/
-.row{
-    overflow: hidden; 
-}
-
-[class*="col-"]{
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
-}
-
-#user-list {
-    overflow-y: scroll;
-    height: 550px;
-}

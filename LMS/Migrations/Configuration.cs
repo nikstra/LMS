@@ -9,7 +9,9 @@ namespace LMS.Migrations
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Globalization;
     using System.Linq;
+    using Extensions;
 
     internal sealed class Configuration : DbMigrationsConfiguration<LMS.Models.ApplicationDbContext>
     {
@@ -23,6 +25,46 @@ namespace LMS.Migrations
         protected override void Seed(LMS.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
+
+            //if (System.Diagnostics.Debugger.IsAttached == false)
+            //    System.Diagnostics.Debugger.Launch();
+
+            // http://stackoverflow.com/questions/25702693/how-do-i-delete-all-data-in-the-seed-method
+            // Deletes all data, from all tables, except for __MigrationHistory
+            //context.Database.ExecuteSqlCommand("sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'");
+            //context.Database.ExecuteSqlCommand("sp_MSForEachTable 'IF OBJECT_ID(''?'') NOT IN (ISNULL(OBJECT_ID(''[dbo].[__MigrationHistory]''),0)) DELETE FROM ?'");
+            //context.Database.ExecuteSqlCommand("EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'");
+
+
+            // groupStartDate should not be using DateTime.Now....
+            DateTime groupStartDate = new DateTime(2016, 3, 10).StartOfNextWeek(DayOfWeek.Monday).Date;
+
+            Group newGroup = AddOrUpdateGroup(context, ".Net", "Påbyggnadskurs ASP.NET och C#", groupStartDate, 60);
+
+            Activity newActivity;
+            Course newCourse;
+            newCourse = AppendOrUpdateCourse(context, newGroup, "C# grunder", "Grunderna i programmeringsspråket C#", groupStartDate, 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#", groupStartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#", newActivity.EndDate.AddWorkDays(1), 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "C# The Next Step", "Mer om programmering i C#", newActivity.EndDate.AddWorkDays(1), 1);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", "Vi lär oss Entity Framework och Linq", newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Entity Framework 6", "Hantering av EF och code first", newCourse.StartDate, 3);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Linq", "Databasfrågor med Linq", newCourse.EndDate.AddWorkDays(1), 2);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend", "Html, Javascript och css", newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "HTML 5", "Skapa webbsidor med den senaste HTML versionen", newCourse.StartDate, 3);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker", newCourse.StartDate, 2);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend 2", "Avancerade frontendlösningar", newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Bootstrap 3", "Designa webbsidor med Bootstrap", newCourse.StartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "JQuery", "Manipulera DOM med JQuery", newCourse.StartDate, 3);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "C# fortsättning", "Fortsättning på C#-kursen", newActivity.EndDate.AddWorkDays(1), 10);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "C#, använda SOLID", "Föreläsning om SOLID-principen och C#", newCourse.StartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Garage", "Skriv ett program.", newCourse.StartDate, 5);
+
+
 
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -43,134 +85,228 @@ namespace LMS.Migrations
             foreach (var user in context.Users.ToList())
             {
                 // Make all users that are not teachers, students.
-                if(!userManager.IsInRole(user.Id, LMSConstants.RoleTeacher))
+                if (!userManager.IsInRole(user.Id, LMSConstants.RoleTeacher))
                     userManager.AddToRole(user.Id, LMSConstants.RoleStudent);
             }
 
-            // Generate and add some students
             RandomGenerator randGen = new RandomGenerator();
-            AddStudents(userManager, randGen.People(100), context.Users.Count());
 
-            // Add a couple of teachers.
+            List<int> groupIds = context.Groups
+                .Select(g => g.Id)
+                .Distinct()
+                .ToList();
+
+            AddStudents(userManager, randGen.People(100), groupIds, context.Users.Count());
+
             AddOrUpdateUser(
                 userManager,
-                new ApplicationUser {
+                new ApplicationUser
+                {
+                    /*UserName = "Robert",*/
+                    Email = "robert@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Robert",
+                    LastName = "Dahlin",
+                    GroupId = newGroup.Id
+                },
+                "Abc_123",
+                LMSConstants.RoleStudent
+                );
+
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser
+                {
+                    /*UserName = "Oscar",*/
+                    Email = "oscar@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Oscar",
+                    LastName = "Urbina",
+                    GroupId = newGroup.Id
+                },
+                "Abc_123",
+                LMSConstants.RoleStudent
+                );
+
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser
+                {
+                    /*UserName = "Niklas",*/
+                    Email = "niklas@springfieldelementary.edu",
+                    PhoneNumber = "070-123456",
+                    FirstName = "Niklas",
+                    LastName = "Strand",
+                    GroupId = newGroup.Id
+                },
+                "Abc_123",
+                LMSConstants.RoleStudent
+                );
+
+            // Some teachers
+            AddOrUpdateUser(
+                userManager,
+                new ApplicationUser
+                {
                     /*UserName = "Seymore",*/
                     Email = "principal.skinner@springfieldelementary.edu",
                     PhoneNumber = "070-123456",
                     FirstName = "Seymore",
-                    LastName = "Skinner" },
+                    LastName = "Skinner"
+                },
                 "Abc_123",
                 LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
                 userManager,
-                new ApplicationUser {
+                new ApplicationUser
+                {
                     /*UserName = "Edna",*/
                     Email = "edna.krabappel@springfieldelementary.edu",
                     PhoneNumber = "070-123456",
                     FirstName = "Edna",
-                    LastName = "Krabappel" },
+                    LastName = "Krabappel"
+                },
                 "Abc_123",
                 LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
                 userManager,
-                new ApplicationUser {
+                new ApplicationUser
+                {
                     /*UserName = "Gary",*/
                     Email = "superintendent.chalmers@springfieldelementary.edu",
                     PhoneNumber = "070-123456",
                     FirstName = "Gary",
-                    LastName = "Chalmers" },
+                    LastName = "Chalmers"
+                },
                 "Abc_123",
                 LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
                 userManager,
-                new ApplicationUser {
+                new ApplicationUser
+                {
                     /*UserName = "Elizabeth",*/
                     Email = "elizabeth.hoover@springfieldelementary.edu",
                     PhoneNumber = "070-123456",
                     FirstName = "Elizabeth",
-                    LastName = "Hoover" },
+                    LastName = "Hoover"
+                },
                 "Abc_123",
                 LMSConstants.RoleTeacher
                 );
 
             AddOrUpdateUser(
                 userManager,
-                new ApplicationUser {
+                new ApplicationUser
+                {
                     /*UserName = "William",*/
                     Email = "groundskeeper.willie@springfieldelementary.edu",
                     PhoneNumber = "070-123456",
                     FirstName = "William",
-                    LastName = "MacDougal" },
+                    LastName = "MacDougal"
+                },
                 "Abc_123",
                 LMSConstants.RoleTeacher
                 );
 
-            // Fails with: Unable to determine the principal end of the 'LMS.Models.Group_Courses' relationship. Multiple added entities may have the same primary key.
-            // Add some groups (classes)
-            DateTime groupStartDate = DateTime.Now.AddDays(5);
-            DateTime groupEndDate = groupStartDate.AddMonths(3);
-            Group group = new Group { Name = ".Net Februari 2016", Description = "Webbutveckling med C# .NET.", StartDate = groupStartDate, EndDate = groupEndDate };
-            context.Groups.AddOrUpdate(g => g.Name,group);
-
-            DateTime courseStartDate = groupStartDate;
-            DateTime courseEndDate = courseStartDate.AddDays(5);
-            Course course = new Course { Name = "C# grunder", Description = "Grundläggande programmering i C#", StartDate = courseStartDate, EndDate = courseEndDate, GroupId = group.Id };
-            context.Courses.AddOrUpdate(c => c.Name, course);
-
-            courseStartDate = courseEndDate;
-            courseEndDate = courseStartDate.AddDays(5);
-            course = new Course { Name = "Linq och databas", Description = "Grunderna i Link och databaser", StartDate = courseStartDate, EndDate = courseEndDate, GroupId = group.Id };
-            context.Courses.AddOrUpdate(c => c.Name, course);
-
-
-            groupStartDate = groupEndDate.AddDays(7);
-            groupEndDate = groupStartDate.AddMonths(3);
-            group = new Group { Name = ".Net Juni 2016", Description = "Webbutveckling med C# .NET.", StartDate = groupStartDate, EndDate = groupEndDate };
-            context.Groups.AddOrUpdate(
-                g => g.Name,
-                group
-                );
+            context.SaveChanges();
         }
 
         /// <summary>
-        /// Adds students.
+        /// Add or update a Group (class).
         /// </summary>
-        /// <param name="userManager">An instance of UserManager.</param>
-        /// <param name="studentNames">A List of first name / last name tuples.</param>
-        /// <param name="maxUserCount">Maxumum number of users you want in the database.</param>
-        private static void AddStudents(UserManager<ApplicationUser> userManager, List<Tuple<string, string>> studentNames, int maxUserCount)
+        /// <param name="context">DB context</param>
+        /// <param name="groupName">The name of the group without month and year (this will be calculated based on the start date).</param>
+        /// <param name="description">A description of the group.</param>
+        /// <param name="startDate">The date when the group starts.</param>
+        /// <param name="duration">The length of the Group in number of days.</param>
+        /// <param name="cultureName">The name of the culture (used when generating month names).</param>
+        /// <returns>The newly added Group.</returns>
+        private static Group AddOrUpdateGroup(ApplicationDbContext context, string groupName, string description,
+                                            DateTime startDate, int duration, string cultureName = "sv-SE")
         {
-            // Don't seed if we already have users.
-            if(studentNames.Count() < maxUserCount)
-                return;
+            CultureInfo cultureInfo = CultureInfo.GetCultureInfo(cultureName);
+            string monthName = DateTimeFormatInfo.GetInstance(cultureInfo).GetMonthName(startDate.Month);
+            monthName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(monthName);
+            //monthName = char.ToUpper(monthName[0]) + monthName.Substring(1);
 
-            foreach (Tuple<string, string> studentName in studentNames)
+            Group newGroup = new Group
             {
-                AddOrUpdateUser(
-                    userManager,
-                    new ApplicationUser
-                    {
-                        /*UserName = studentName.Item1,*/
-                        Email = studentName.Item1 + "." + studentName.Item2 + "@springfieldelementary.edu",
-                        PhoneNumber = "070-123456",
-                        FirstName = studentName.Item1,
-                        LastName = studentName.Item2
-                    },
-                    "Abc_123",
-                    LMSConstants.RoleStudent
-                    );
-            }
+                Name = string.Format("{0} {1} {2}", groupName, monthName, startDate.Year),
+                Description = description,
+                StartDate = startDate,
+                EndDate = startDate.AddWorkDays(duration)
+            };
+
+            context.Groups.AddOrUpdate(g => g.Name, newGroup);
+
+            context.SaveChanges();
+            return newGroup;
         }
 
         /// <summary>
-        /// Add an ApplicationUser unless a user with the same email address already exist.
+        /// Add or update a Course.
+        /// </summary>
+        /// <param name="context">DB context</param>
+        /// <param name="group">The Group object to which this Course belongs.</param>
+        /// <param name="courseName">The name of the course.</param>
+        /// <param name="description">A description of the course.</param>
+        /// <param name="courseStartDate">The date when the course starts.</param>
+        /// <param name="duration">The length of the course in number of days.</param>
+        /// <returns>The newly created Course.</returns>
+        private Course AppendOrUpdateCourse(ApplicationDbContext context, Group group, string courseName,
+                                                string description, DateTime courseStartDate, int duration)
+        {
+            Course newCourse = new Course
+            {
+                Name = courseName,
+                Description = description,
+                StartDate = courseStartDate,
+                EndDate = courseStartDate.AddWorkDays(duration),
+                GroupId = group.Id
+            };
+
+            context.Courses.AddOrUpdate(c => new { c.Name, c.StartDate }, newCourse);
+
+            context.SaveChanges();
+            return newCourse;
+        }
+
+        /// <summary>
+        /// Add or update an Activity.
+        /// </summary>
+        /// <param name="context">DB context</param>
+        /// <param name="course">The Course object to which this Activity belongs.</param>
+        /// <param name="name">The name of the activity.</param>
+        /// <param name="description">A description of the activity.</param>
+        /// <param name="activityStartDate">The date when the course starts.</param>
+        /// <param name="duration">The length of the activity in days.</param>
+        /// <returns>The newly created Activity</returns>
+        private Activity AppendOrUpdateActivity(ApplicationDbContext context, Course course, string name,
+                                                    string description, DateTime activityStartDate, int duration)
+        {
+            Activity newActivity = new Activity
+            {
+                Name = name,
+                Description = description,
+                StartDate = activityStartDate,
+                EndDate = activityStartDate.AddWorkDays(duration),
+                CourseId = course.Id
+            };
+
+            context.Activities.AddOrUpdate(a => new { a.Name, a.StartDate }, newActivity);
+
+            context.SaveChanges();
+            return newActivity;
+        }
+
+        /// <summary>
+        /// Add or update an ApplicationUser unless a user with the same email address already exist.
         /// </summary>
         /// <param name="userManager">An instance of a UserManager.</param>
         /// <param name="newUser">An instance of the ApplicationUser to be created.</param>
@@ -179,6 +315,9 @@ namespace LMS.Migrations
         /// <returns></returns>
         private static void AddOrUpdateUser(UserManager<ApplicationUser> userManager, ApplicationUser newUser, string password, string role)
         {
+            newUser.Email = newUser.Email.RemoveDiacritics();
+
+            //System.IO.File.AppendAllLines(@"C:\temp\LMSout.txt", new List<string> { newUser.FirstName + " " + newUser.LastName + " " + newUser.GroupId.ToString() + " " + newUser.Email });
             // Set UserName to Email to get the same behaviour as in the AccountController.Register() method.
             newUser.UserName = newUser.Email;
 
@@ -187,9 +326,106 @@ namespace LMS.Migrations
             if (appUser == null)
             {
                 IdentityResult result = userManager.Create(newUser, password);
-                if(result.Succeeded)
+                if (result.Succeeded)
                     userManager.AddToRole(newUser.Id, role);
+                //else
+                //    System.IO.File.AppendAllLines(@"C:\temp\LMSout.txt", result.Errors);
+            }
+            //else
+            //{
+            //    throw new Exception("Duplicate user: " + appUser.UserName);
+            //}
+        }
+
+        /// <summary>
+        /// Adds students from a List.
+        /// </summary>
+        /// <param name="userManager">An instance of UserManager.</param>
+        /// <param name="studentNames">A List of first name / last name tuples.</param>
+        /// <param name="maxUserCount">Maxumum number of users you want in the database.</param>
+        private static void AddStudents(UserManager<ApplicationUser> userManager,
+                                            List<Tuple<string, string>> studentNames, List<int> groupIds, int maxUserCount)
+        {
+            // Don't seed if we already have users.
+            if (studentNames.Count() < maxUserCount)
+                return;
+
+            int maxNumberOfGroupMembers = 14;
+
+            Stack<int> availableGroupIds = new Stack<int>();
+            foreach(int id in groupIds)
+            {
+                int groupMemberCount = userManager.Users
+                    .Where(u => u.GroupId == id)
+                    .Count();
+
+                if (groupMemberCount < maxNumberOfGroupMembers)
+                    availableGroupIds.Push(id);
+            }
+
+            int i = 0;
+            int? groupId = null;
+
+            foreach (Tuple<string, string> studentName in studentNames)
+            {
+                if (i % maxNumberOfGroupMembers == 0)
+                {
+                    if (availableGroupIds.Count() > 0)
+                        groupId = availableGroupIds.Pop();
+                    else
+                        groupId = null;
+                }
+
+                i++;
+                AddOrUpdateUser(
+                    userManager,
+                    new ApplicationUser
+                    {
+                        /*UserName = studentName.Item1,*/
+                        Email = studentName.Item1 + "." + studentName.Item2 + "@springfieldelementary.edu",
+                        PhoneNumber = "070-123456",
+                        FirstName = studentName.Item1,
+                        LastName = studentName.Item2,
+                        GroupId = groupId // (i++ % 14 == 0) ? groupIds[groupIdIndex++] : groupIds[groupIdIndex]
+                    },
+                    "Abc_123",
+                    LMSConstants.RoleStudent
+                    );
             }
         }
+
+
+        //internal static string RemoveDiacritics(string input)
+        //{
+        //    if (String.IsNullOrEmpty(input))
+        //        return String.Empty;
+
+        //    string stFormD = input.Normalize(NormalizationForm.FormD);
+        //    StringBuilder sb = new StringBuilder();
+
+        //    for (int ich = 0; ich < stFormD.Length; ich++)
+        //    {
+        //        UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(stFormD[ich]);
+        //        if (uc != UnicodeCategory.NonSpacingMark)
+        //        {
+        //            sb.Append(stFormD[ich]);
+        //        }
+        //    }
+
+        //    return (sb.ToString().Normalize(NormalizationForm.FormC));
+        //}
+
+        #region SeedData
+            //courses "C# grunder", "Grunderna i programmeringsspråket C#");
+
+            //newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#", groupStartDate, 2);
+            //newActivity = AppendOrUpdateActivity(context, newCourse, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#", newActivity.EndDate.AddWorkDays(1), 2);
+            //newActivity = AppendOrUpdateActivity(context, newCourse, "C# The Next Step", "Mer om programmering i C#", newActivity.EndDate.AddWorkDays(1), 1);
+
+            //newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", "Vi lär oss Entity Framework och Linq", newActivity.EndDate.AddWorkDays(1), 5);
+            //newActivity = AppendOrUpdateActivity(context, newCourse, "Entity Framework 6", "Hantering av EF och code first", newCourse.StartDate, 3);
+            //newActivity = AppendOrUpdateActivity(context, newCourse, "Linq", "Databasfrågor med Linq", newCourse.EndDate.AddWorkDays(1), 2);
+
+        #endregion
     }
 }

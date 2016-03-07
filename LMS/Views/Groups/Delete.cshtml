@@ -6,7 +6,15 @@
 
 <h2>Radera Grupp</h2>
 
-<h3>Är du säker på att du vill radera det här?</h3>
+
+@if (ViewBag.Error != null)
+{
+    <h3 style="color: red">@Html.ViewBag.Error</h3>
+}
+else
+{
+    <h3>Är du säker på att du vill radera det här?</h3>
+}
 <div>
     @*<h4>Group</h4>*@
     <hr />
@@ -53,13 +61,17 @@
 
     </dl>
 
+
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Bekräfta" class="btn btn-default" />
-        </div>
+        if (ViewBag.Error == null)
+        {
+            <div class="form-actions no-color">
+                <input type="submit" value="Bekräfta" class="btn btn-default" />
+            </div>
+        }
     }
 
 </div>

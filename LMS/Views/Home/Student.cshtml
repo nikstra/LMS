@@ -27,7 +27,7 @@
                             @Html.DisplayFor(modelItem => item.StartDate)
                         </td>
                         <td>
-                            E-learning @*Placeholder for type field in Activities table*@
+                            @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         <td>
                             @Html.ActionLink(item.Name, "Details", "Activities", new { id = item.Id }, null)

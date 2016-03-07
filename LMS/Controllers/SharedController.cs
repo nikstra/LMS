@@ -9,6 +9,7 @@ namespace LMS.Controllers
     /// <summary>
     /// A shared controller. Can be used with partial views.
     /// </summary>
+    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
     public class SharedController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

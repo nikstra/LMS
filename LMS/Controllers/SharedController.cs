@@ -42,6 +42,29 @@ namespace LMS.Controllers
             return Content("Ingen grupp");
         }
 
+        /// <summary>
+        /// Call this action in the view to get the current users first name.
+        /// </summary>
+        /// <returns>
+        /// ContentResult.Content() with either the first name or
+        /// a string indicating that no name was found.
+        /// </returns>
+        public ActionResult FirstName()
+        {
+            db.Database.Log = (m => Debug.Print(m));
+
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (activeUser != null && activeUser.FirstName != null)
+            {
+                return Content(activeUser.FirstName);
+            }
+
+            return Content("Inget förnamn");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -8,14 +8,18 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Hantera konto" })
+                @{
+                    HtmlString firstName = Html.Action("FirstName", "Shared");
+                    @Html.ActionLink(firstName.ToString(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Hantera konto" })
+                    
+                }
             </li>
             <li>
                 @{
-                    HtmlString name = Html.Action("GroupName", "Shared");
+                    HtmlString groupName = Html.Action("GroupName", "Shared");
                     if (TempData["IsAdministrator"] == null)
                     {
-                        @Html.ActionLink("@ " + name.ToString(), "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
+                        @Html.ActionLink("@ " + groupName.ToString(), "Details", "Groups", routeValues: new { id = TempData["GroupId"] }, htmlAttributes: new { title = "Visa detaljer för grupp" });
                     }
                 }
                 @*@var n = @Html.RenderAction("GroupName", "Shared")*@

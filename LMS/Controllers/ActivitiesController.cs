@@ -57,7 +57,6 @@ namespace LMS.Controllers
             activity.CourseId = CourseId;
             activity.StartDate = DateTime.Now;
             activity.EndDate = DateTime.Now;
-            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             return View(activity);
         }
 
@@ -67,7 +66,7 @@ namespace LMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Activity activity)
+        public ActionResult Create([Bind(Include = "Id,Name,Type,Description,StartDate,EndDate,CourseId")] Activity activity)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +74,6 @@ namespace LMS.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
-            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
@@ -93,7 +91,6 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }
@@ -104,7 +101,7 @@ namespace LMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Activity activity)
+        public ActionResult Edit([Bind(Include = "Id,Name,Type,Description,StartDate,EndDate,CourseId")] Activity activity)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +109,6 @@ namespace LMS.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Details", "Courses", new { id = activity.CourseId });
             }
-            ViewBag.ActivityType = new SelectList(db.Activities, "Id", "Name");
             //ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", activity.CourseId);
             return View(activity);
         }

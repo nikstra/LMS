@@ -62,7 +62,9 @@ namespace LMS.Controllers
             if(currentUser.GroupId != null)
             {
                 var usersInGroup = db.Users
-                    .Where(u => u.GroupId == currentUser.GroupId) ?? null;
+                    .Where(u => u.GroupId == currentUser.GroupId)
+                    .OrderBy(u => u.FirstName)
+                    ?? null;
 
                 TempData["ApplicationUsers"] = usersInGroup;
             }
@@ -72,7 +74,7 @@ namespace LMS.Controllers
             }
 
             var upcomingActivities = db.Activities
-                .Where(a => a.StartDate >= DateTime.Now)
+                .Where(a => a.EndDate >= DateTime.Now)
                 .Where(a => a.Course.GroupId == currentUser.GroupId)
                 .OrderBy(a => a.StartDate)
                 .Take(10)

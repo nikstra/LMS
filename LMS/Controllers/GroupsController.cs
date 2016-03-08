@@ -126,9 +126,20 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Group group = db.Groups.Find(id);
-            if (group.Courses.Any(c => c.GroupId == group.Id))
+            
+            if (group.Users.Any(u => u.GroupId == group.Id) && (group.Courses.Any(c => c.GroupId == group.Id)))
+            {
+                ViewBag.Error = "Kan inte radera - Både studenter och kurser finns i grupp";
+                return View(group);
+            }
+            else if (group.Courses.Any(c => c.GroupId == group.Id))
             {
                 ViewBag.Error = "Kan inte radera - kurser finns i grupp";
+                return View(group);
+            }
+            else if (group.Users.Any(u => u.GroupId == group.Id))
+            {
+                ViewBag.Error = "Kan inte radera - studenter finns i grupp";
                 return View(group);
             }
             else

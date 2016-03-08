@@ -9,7 +9,7 @@
     <tr>
         <th>Aktivitetsnamn</th>
         <th>Typ</th>
-        <th>Beskrivning</th>
+        <th class="col-md-4">Beskrivning</th>
         <th>Startdatum</th>
         <th>Slutdatum</th>
     </tr>
@@ -18,7 +18,7 @@
         <tr>
             <td>@Html.ActionLink(activity.Name, "Details", "Activities", new { id = activity.Id }, null)</td>
             <td>@Html.DisplayFor(modelItem => activity.Type)</td>
-            <td>@Html.DisplayFor(modelItem => activity.Description)</td>
+            <td class="col-md-4">@Html.DisplayFor(modelItem => activity.Description)</td>
             <td>@Html.DisplayFor(modelItem => activity.StartDate)</td>
             <td>@Html.DisplayFor(modelItem => activity.EndDate)</td>
 

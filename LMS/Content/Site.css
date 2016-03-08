@@ -80,3 +80,10 @@ ul.nav a {
 ul.nav a:hover {
     color: rgb(255, 255, 255) !important;
 }
+
+/* Override Bootstraps font size for the accordion
+************************************************************/
+.panel-title,
+.panel-body {
+    font-size: 90%;
+}

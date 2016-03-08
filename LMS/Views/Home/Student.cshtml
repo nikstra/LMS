@@ -1,6 +1,5 @@
 ﻿@using LMS.Models
 @model IEnumerable<LMS.Models.Activity>
-@Styles.Render("~/Content/SiteLayout.css")
 @{
     ViewBag.Title = "Index";
 }
@@ -23,13 +22,13 @@
                         <tr><td colspan="3"><b>Kurs: @item.Course.Name</b></td></tr>
                     }
                     <tr>
-                        <td>
+                        <td class="col-md-2">
                             @Html.DisplayFor(modelItem => item.StartDate)
                         </td>
-                        <td>
+                        <td class="col-md-2">
                             @Html.DisplayFor(modelItem => item.Type)
                         </td>
-                        <td>
+                        <td class="col-md-8">
                             @Html.ActionLink(item.Name, "Details", "Activities", new { id = item.Id }, null)
                         </td>
                         @*<td>
@@ -46,7 +45,7 @@
 
             </table>
         </div>
-        <div class="col-md-4 col-md-offset-1 well">
+        <div class="col-md-4 col-md-offset-1">
             <h4>Gruppdeltagare</h4>
             <div id="user-list">
                 @*http://www.tutorialspark.com/twitterBootstrap/TwitterBootstrap_Collapsible_Accordion.php*@

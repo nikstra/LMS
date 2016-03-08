@@ -71,3 +71,12 @@ textarea {
     width: auto;
     height: 40px;
 }
+
+/* Override Bootstraps link color for the menu
+************************************************************/
+ul.nav a {
+    color: rgb(142, 255, 150) !important;
+}
+ul.nav a:hover {
+    color: rgb(255, 255, 255) !important;
+}

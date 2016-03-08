@@ -72,6 +72,16 @@ textarea {
     height: 40px;
 }
 
+#loginLogo{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.formInputbox{
+    margin-left:auto;
+    margin-right:auto;
+}
+
 /* Override Bootstraps link color for the menu
 ************************************************************/
 ul.nav a {
@@ -87,3 +97,4 @@ ul.nav a:hover {
 .panel-body {
     font-size: 90%;
 }
+

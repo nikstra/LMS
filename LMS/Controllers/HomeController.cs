@@ -34,6 +34,7 @@ namespace LMS.Controllers
         {
             // Temporarly using the about page as start page for authenticated users.
             ViewBag.ReturnUrl = "/Home/Index";
+            ViewBag.Error = TempData["Error"];
 
             if (User.Identity.IsAuthenticated)
             {

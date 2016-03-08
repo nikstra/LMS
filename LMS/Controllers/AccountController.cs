@@ -162,7 +162,8 @@ namespace LMS.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Misslyckat inloggningsförsök.");
-                    return View(model);
+                    TempData["Error"] = "Misslyckat inloggningsförsök.";
+                    return RedirectToAction("Index", "Home");
             }
         }
 

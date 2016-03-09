@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using LMS.Models;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LMS.Controllers
 {
@@ -37,7 +38,7 @@ namespace LMS.Controllers
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
                     RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name
-                                    
+
                 };
                 userList.Add(model);
             }
@@ -71,12 +72,12 @@ namespace LMS.Controllers
             //                RoleName = r.Name,
             //            };
 
-            
+
             //userList.Add(users);
             //var usersWithRole = users.ToArray();
 
             //IEnumerable<UserViewModel> usersWithRole = users;
-           
+
             //var users = db.Users
             //    .Join(
             //    db.Roles,
@@ -97,7 +98,7 @@ namespace LMS.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -109,9 +110,9 @@ namespace LMS.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -196,7 +197,7 @@ namespace LMS.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -215,6 +216,7 @@ namespace LMS.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
             return View();
         }
 
@@ -225,25 +227,59 @@ namespace LMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+
+            if (db.Users.Any(u => u.Email == model.Email))
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
-                }
-                AddErrors(result);
+                ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
+                ViewBag.Error = "En användare med denna e-postadress finns redan";
+                return View(model);
             }
+            else
+            {
 
+
+                if (ModelState.IsValid)
+                {
+
+
+                    var user = new ApplicationUser()
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        UserName = model.Email,
+                        Email = model.Email,
+                        PhoneNumber = model.PhoneNumber,
+                        GroupId = model.GroupId
+                    };
+
+
+                    var result = await UserManager.CreateAsync(user, model.Password);
+
+                    var roleStore = new RoleStore<IdentityRole>(db);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+                    var userStore = new UserStore<ApplicationUser>(db);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+
+                    UserManager.AddToRole(user.Id, model.Role.ToString());
+
+
+
+                    if (result.Succeeded)
+                    {
+                        //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                        // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                        // Send an email with this link
+                        // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                        return RedirectToAction("Register", "Account");
+                    }
+                    AddErrors(result);
+                }
+            }
             // If we got this far, something failed, redisplay form
             return View(model);
         }

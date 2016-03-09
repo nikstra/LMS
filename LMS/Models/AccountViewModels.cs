@@ -65,9 +65,29 @@ namespace LMS.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Roll")]
+        public Role Role { get; set; }
+
+        public int GroupId { get; set; }
+        
+        [Display(Name = "Grupp")]
+        public Group Group { get; set; }
+
+        [Required]
+        [Display(Name = "Förnamn")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Efternamn")]
+        public string LastName { get; set; }
+        
+        [Required]
         [EmailAddress]
         [Display(Name = "E-post")]
         public string Email { get; set; }
+
+        [Display(Name = "Telefonnummer")]
+        public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "{0} måste var minst {2} tecken långt.", MinimumLength = 6)]

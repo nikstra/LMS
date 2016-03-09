@@ -22,13 +22,13 @@
                         <tr><td colspan="3"><b>Kurs: @item.Course.Name</b></td></tr>
                     }
                     <tr>
-                        <td class="col-md-2">
-                            @Html.DisplayFor(modelItem => item.StartDate)
+                        <td class="col-md-4">
+                            @Html.DisplayFor(modelItem => item.StartDate) - @Html.DisplayFor(modelItem => item.EndDate)
                         </td>
                         <td class="col-md-2">
                             @Html.DisplayFor(modelItem => item.Type)
                         </td>
-                        <td class="col-md-8">
+                        <td class="col-md-7">
                             @Html.ActionLink(item.Name, "Details", "Activities", new { id = item.Id }, null)
                         </td>
                         @*<td>

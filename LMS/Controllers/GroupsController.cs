@@ -52,7 +52,10 @@ namespace LMS.Controllers
         [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Create()
         {
-            return View();
+            Group group = new Group();
+            group.StartDate = DateTime.Now;
+            group.EndDate = DateTime.Now;
+            return View(group);
         }
 
         // POST: Groups/Create

@@ -12,6 +12,8 @@ using LMS.Models;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Net;
+using LMS.Constants;
 
 namespace LMS.Controllers
 {
@@ -283,6 +285,40 @@ namespace LMS.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+        // GET: ApplicationUser/Delete/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
+        public ActionResult DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ApplicationUser user = db.Users.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+
+        // POST: ApplicationUser/Delete/5
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
+        public ActionResult DeleteConfirmed(string id)
+        {
+            ApplicationUser user = db.Users.Find(id);
+                
+                var groupId = user.GroupId;
+            
+                db.Users.Remove(user);
+                db.SaveChanges();
+                return RedirectToAction("Details", "Groups", new { id = groupId });
+            
+        }
+
 
         //
         // GET: /Account/ConfirmEmail

@@ -98,3 +98,8 @@ ul.nav a:hover {
     font-size: 90%;
 }
 
+/*Override bootstraps margins on rows*/
+.no-margins{
+    margin-left: 0px;
+    margin-right: 0px;
+}

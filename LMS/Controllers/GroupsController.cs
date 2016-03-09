@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using LMS.Models;
 using LMS.Constants;
+using Microsoft.AspNet.Identity;
 
 namespace LMS.Controllers
 {
@@ -15,17 +16,18 @@ namespace LMS.Controllers
     public class GroupsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+        protected UserManager<ApplicationUser> UserManager { get; set; }
 
         // GET: Groups
-        
+
         [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Index()
         {
-                return View(db.Groups.ToList());
+            return View(db.Groups.ToList());
         }
 
         // GET: Groups/Details/5
-        
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -43,7 +45,7 @@ namespace LMS.Controllers
                 return View(group);
             }
             else
-            return View(group);
+                return View(group);
         }
 
         // GET: Groups/Create
@@ -126,7 +128,7 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Group group = db.Groups.Find(id);
-            
+
             if (group.Users.Any(u => u.GroupId == group.Id) && (group.Courses.Any(c => c.GroupId == group.Id)))
             {
                 ViewBag.Error = "Kan inte radera - Både studenter och kurser finns i grupp";
@@ -150,7 +152,7 @@ namespace LMS.Controllers
             }
         }
 
-        // GET: Groups/UsersInGroup/3
+        //GET: Groups/UsersInGroup/3
         [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
         public ActionResult UsersInGroup(int? id)
         {
@@ -162,7 +164,7 @@ namespace LMS.Controllers
             var usersInGroup = db.Users
                 .Where(u => u.GroupId == id) ?? null;
 
-            if(usersInGroup.Count() > 0)
+            if (usersInGroup.Count() > 0)
             {
                 ViewBag.GroupName = db.Groups
                     .Where(g => g.Id == id)
@@ -170,7 +172,7 @@ namespace LMS.Controllers
                     .Name;
 
 
-                if(User.IsInRole(LMSConstants.RoleTeacher))
+                if (User.IsInRole(LMSConstants.RoleTeacher))
                     ViewBag.IsAdministrator = true;
 
                 return View(usersInGroup);
@@ -178,6 +180,63 @@ namespace LMS.Controllers
 
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
+
+
+        public ActionResult _StudentsInGroup(Group group)
+        {
+            if (group != null)
+            {
+                var usersInGroup = db.Users
+                    .Where(u => u.GroupId == group.Id)
+                    .OrderBy(u => u.FirstName)
+                    ?? null;
+
+                TempData["ApplicationUsers"] = usersInGroup;
+            }
+            else
+            {
+                TempData["ApplicationUsers"] = new List<ApplicationUser>();
+            }
+
+            if (User.IsInRole(LMSConstants.RoleTeacher))
+            {
+                ViewBag.IsAdministrator = true;
+                return View(group);
+            }
+            else
+                return View(group);
+        }
+
+
+        //public ActionResult Student()
+        //{
+        //    var currentUser = UserManager.FindById(User.Identity.GetUserId());
+
+        //    if (currentUser.GroupId != null)
+        //    {
+        //        var usersInGroup = db.Users
+        //            .Where(u => u.GroupId == currentUser.GroupId)
+        //            .OrderBy(u => u.FirstName)
+        //            ?? null;
+
+        //        TempData["ApplicationUsers"] = usersInGroup;
+        //    }
+        //    else
+        //    {
+        //        TempData["ApplicationUsers"] = new List<ApplicationUser>();
+        //    }
+
+        //    var upcomingActivities = db.Activities
+        //        .Where(a => a.EndDate >= DateTime.Now)
+        //        .Where(a => a.Course.GroupId == currentUser.GroupId)
+        //        .OrderBy(a => a.StartDate)
+        //        .Take(10)
+        //        .ToList();
+
+        //    return View(upcomingActivities);
+        //    //return View(db.Activities.ToList());
+        //}
+
 
         protected override void Dispose(bool disposing)
         {

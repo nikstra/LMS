@@ -9,19 +9,22 @@
 
 <hr />
 
+<div class="well">
+
+    <h3>@Html.DisplayNameFor(model => model.Description)</h3>
+
+    <p>@Html.DisplayFor(model => model.Description)</p>
+
+</div>
 <div>
-    <dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-
-    @Html.Partial("_CoursesInGroup")
-
+    <div class="row no-margins">
+        <div class="col-md-7 well">
+            @Html.Partial("_CoursesInGroup")
+        </div>
+        <div class="col-md-4 col-lg-offset-1 well">
+            @Html.Partial("_StudentsInGroup")
+        </div>
+    </div>
 
 </div>
 

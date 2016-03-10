@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Net;
 using LMS.Constants;
+using System.Data.Entity;
 
 namespace LMS.Controllers
 {
@@ -285,6 +286,57 @@ namespace LMS.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+
+
+        // GET: ApplicationUser/Edit/5
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
+        public ActionResult EditUser(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ApplicationUser currentUser = db.Users.Find(id);
+
+            if(currentUser == null)
+            {
+                return HttpNotFound();
+            }
+           
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
+            return View(currentUser);
+        }
+
+        // POST: ApplicationUser/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
+        public ActionResult EditUser([Bind(Include = "Id,GroupId,Email,PhoneNumber,FirstName,LastName")] ApplicationUser currentUser)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = db.Users.Find(currentUser.Id);
+
+                user.FirstName = currentUser.FirstName;
+                user.LastName = currentUser.LastName;
+                user.Email = currentUser.Email;
+                user.PhoneNumber = currentUser.PhoneNumber;
+                user.GroupId = currentUser.GroupId;
+
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
+            }
+            return View(currentUser);
+        }
+
+
+        
 
         // GET: ApplicationUser/Delete/5
         [Authorize(Roles = LMSConstants.RoleTeacher)]

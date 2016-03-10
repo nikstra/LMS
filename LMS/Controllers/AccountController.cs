@@ -36,6 +36,7 @@ namespace LMS.Controllers
                 //var name = db.Roles.Where(r => userRolesId.Contains(r.Id));
                 var model = new UserViewModel()
                 {
+                    Id = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
@@ -46,7 +47,8 @@ namespace LMS.Controllers
                 userList.Add(model);
             }
 
-            return View(userList);
+            var sortedUserList = userList.OrderBy(g=> g.FirstName);
+            return View(sortedUserList);
 
 
 
@@ -300,12 +302,12 @@ namespace LMS.Controllers
             }
 
             ApplicationUser currentUser = db.Users.Find(id);
-
-            if(currentUser == null)
+            TempData["UrlReferrer"] = Request.UrlReferrer.LocalPath;
+            if (currentUser == null)
             {
                 return HttpNotFound();
             }
-           
+
             ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
             return View(currentUser);
         }
@@ -330,13 +332,19 @@ namespace LMS.Controllers
 
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
+                string urlRefferer = (string)TempData["UrlReferrer"];
+                string userListUrl = "/Account/UserList";
+                if (urlRefferer.ToString() == userListUrl)
+                {
+                    return RedirectToAction("UserList", "Account");
+                }
                 return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
             }
             return View(currentUser);
         }
 
 
-        
+
 
         // GET: ApplicationUser/Delete/5
         [Authorize(Roles = LMSConstants.RoleTeacher)]
@@ -347,6 +355,9 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ApplicationUser user = db.Users.Find(id);
+
+            TempData["UrlReferrer"] = Request.UrlReferrer.LocalPath;
+
             if (user == null)
             {
                 return HttpNotFound();
@@ -362,14 +373,20 @@ namespace LMS.Controllers
         public ActionResult DeleteConfirmed(string id)
         {
             ApplicationUser user = db.Users.Find(id);
-                
-                var groupId = user.GroupId;
-            
-                db.Users.Remove(user);
-                db.SaveChanges();
-                return RedirectToAction("Details", "Groups", new { id = groupId });
-            
+
+            var groupId = user.GroupId;
+
+            db.Users.Remove(user);
+            db.SaveChanges();
+            string urlRefferer = (string)TempData["UrlReferrer"];
+            string userListUrl = "/Account/UserList";
+            if (urlRefferer.ToString() == userListUrl)
+            {
+                return RedirectToAction("UserList", "Account");
+            }
+            return RedirectToAction("Details", "Groups", new { id = groupId });
         }
+
 
 
         //

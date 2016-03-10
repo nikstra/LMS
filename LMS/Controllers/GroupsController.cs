@@ -185,30 +185,30 @@ namespace LMS.Controllers
         }
 
 
-        public ActionResult _StudentsInGroup(Group group)
-        {
-            if (group != null)
-            {
-                var usersInGroup = db.Users
-                    .Where(u => u.GroupId == group.Id)
-                    .OrderBy(u => u.FirstName)
-                    ?? null;
+        //public ActionResult _StudentsInGroup(Group group)
+        //{
+        //    if (group != null)
+        //    {
+        //        var usersInGroup = db.Users
+        //            .Where(u => u.GroupId == group.Id)
+        //            .OrderBy(u => u.FirstName)
+        //            ?? null;
 
-                TempData["ApplicationUsers"] = usersInGroup;
-            }
-            else
-            {
-                TempData["ApplicationUsers"] = new List<ApplicationUser>();
-            }
+        //        TempData["ApplicationUsers"] = usersInGroup;
+        //    }
+        //    else
+        //    {
+        //        TempData["ApplicationUsers"] = new List<ApplicationUser>();
+        //    }
 
-            if (User.IsInRole(LMSConstants.RoleTeacher))
-            {
-                ViewBag.IsAdministrator = true;
-                return View(group);
-            }
-            else
-                return View(group);
-        }
+        //    if (User.IsInRole(LMSConstants.RoleTeacher))
+        //    {
+        //        ViewBag.IsAdministrator = true;
+        //        return View(group);
+        //    }
+        //    else
+        //        return View(group);
+        //}
 
 
         //public ActionResult Student()

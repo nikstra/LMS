@@ -11,6 +11,7 @@ namespace LMS.Models
     public class ApplicationUser : IdentityUser
     {
         public int? GroupId { get; set; }
+        [Display(Name = "Grupp")]
         public virtual Group Group { get; set; }
         [Display(Name = "Användarnamn")]
         public override string UserName { get { return base.UserName; } set { base.UserName = value; } }

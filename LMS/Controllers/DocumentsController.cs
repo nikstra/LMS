@@ -102,10 +102,10 @@ namespace LMS.Controllers
 
                     //var t = type;
                     //Request.UrlReferrer.LocalPath == "/Home/Student";
-                    if (User.IsInRole(LMSConstants.RoleStudent))
-                        uploadDocument.GroupId = id; //activeUser.GroupId;
-                    else if (type == LMSConstants.Activity)
+                    if (type == LMSConstants.Activity)
                         uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"];
+                    else if (User.IsInRole(LMSConstants.RoleStudent))
+                        uploadDocument.GroupId = id; //activeUser.GroupId;
                     else if (type == LMSConstants.Course)
                         uploadDocument.CourseId = id; //(int?)TempData["CourseId"];
                     else if (type == LMSConstants.Group)

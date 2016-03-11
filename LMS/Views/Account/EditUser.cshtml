@@ -90,6 +90,10 @@
         {
             @Html.ActionLink("Tillbaka", "UserList", "Account")
         }
+        else if (Request.UrlReferrer.LocalPath == "/Account/UserDetails/" + Model.Id)
+        {
+            @Html.ActionLink("Tillbaka", "UserDetails", "Account", new { id = Model.Id }, null)
+        }
         else
         {
             @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)

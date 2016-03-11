@@ -46,7 +46,11 @@ namespace LMS.Controllers
 
             TempData["ActivityId"] = activity.Id;
             TempData["DocumentParent"] = LMSConstants.Activity;
-
+            
+            if(activity.Type == ActivityType.Assignment)
+            {
+                TempData["Assignment"] = true;
+            }
 
             ViewBag.DocumentModel = db.Documents
                 .Where(d => d.ActivityId == id)

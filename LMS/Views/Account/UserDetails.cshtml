@@ -1,0 +1,106 @@
+﻿@model LMS.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Användardetaljer";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<hr />
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Group)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Group.Name)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Feedback)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Feedback)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeStamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocalPath)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocalPath)
+        </dd>*@
+
+    </dl>
+<p>
+    @Html.ActionLink("Redigera", "EditUser", "Account", new { id = Model.Id }, null) |
+    @Html.ActionLink("Radera", "DeleteUser", "Account", new { id = Model.Id }, null)
+</p>
+</div>
+<p>
+    @if (Request.UrlReferrer.LocalPath == "/Account/UserList")
+    {
+        @Html.ActionLink("Tillbaka", "UserList", "Account")
+    }
+    else if (Request.UrlReferrer.LocalPath == "/Account/UserDetails/" + Model.Id)
+    {
+        @Html.ActionLink("Tillbaka", "UserDetails", "Account", new { id = Model.Id }, null)
+    }
+    else
+    {
+        @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)
+    }
+</p>
+

@@ -22,8 +22,11 @@ namespace LMS.Models
         public int? CourseId { get; set; }
         public int? GroupId { get; set; }
 
+        [Display(Name = "Aktivitet")]
         public virtual Activity Activity { get; set; }
+        [Display(Name = "Kurs")]
         public virtual Course Course { get; set; }
+        [Display(Name = "Grupp")]
         public virtual Group Group { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
     }

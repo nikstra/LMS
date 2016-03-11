@@ -36,13 +36,19 @@ namespace LMS.Controllers
         }
 
         // GET: Documents/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string type, int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Document document = db.Documents.Find(id);
+                //.Include(d => d.Group.Name).Where(d => d.Id == id).FirstOrDefault();//
+            ////if (type == LMSConstants.Group)
+            //    var dbdoc = db.Documents.Include(d => d.Group.Name)
+            //        //.Where(d => d.Id == id).Find(id);
+            //    //document.Include();
+
             if (document == null)
             {
                 return HttpNotFound();

@@ -31,6 +31,37 @@
             @Html.DisplayFor(model => model.ApplicationUser.UserName)
         </dd>
 
+        @if (Model.Activity != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Activity)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Activity.Name)
+            </dd>
+        }
+        else if (Model.Course != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Course)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Course.Name)
+            </dd>
+        }
+        else if (Model.Group != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Group)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Group.Name)
+            </dd>
+        }
+
         <dt>
             @Html.DisplayNameFor(model => model.Description)
         </dt>

@@ -289,7 +289,36 @@ namespace LMS.Controllers
             return View(model);
         }
 
+        // GET: UserDetails/5
+        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
+        public ActionResult UserDetails(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            //Course course = db.Courses.Find(id);
+            //if (course == null)
+            //{
+            //    return HttpNotFound();
+            //}
 
+            //TempData["CourseId"] = course.Id;
+            //TempData["DocumentParent"] = LMSConstants.Course;
+
+            //ViewBag.DocumentModel = db.Documents
+            //    .Where(d => d.CourseId == id)
+            //    .ToList();
+            ApplicationUser currentUser = db.Users.Find(id);
+
+            if (User.IsInRole(LMSConstants.RoleTeacher))
+            {
+                ViewBag.IsAdministrator = true;
+                return View(currentUser);
+            }
+
+            return View(currentUser);
+        }
 
 
         // GET: ApplicationUser/Edit/5
@@ -334,9 +363,14 @@ namespace LMS.Controllers
                 db.SaveChanges();
                 string urlRefferer = (string)TempData["UrlReferrer"];
                 string userListUrl = "/Account/UserList";
+                string userDetails = "/Account/UserDetails/" + user.Id;
                 if (urlRefferer.ToString() == userListUrl)
                 {
                     return RedirectToAction("UserList", "Account");
+                }
+                else if (urlRefferer.ToString() == userDetails)
+                {
+                    return RedirectToAction("UserDetails", "Account", new { id = currentUser.Id });
                 }
                 return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
             }
@@ -380,6 +414,7 @@ namespace LMS.Controllers
             db.SaveChanges();
             string urlRefferer = (string)TempData["UrlReferrer"];
             string userListUrl = "/Account/UserList";
+            string userDetails = "/Account/UserDetails/" + user.Id;
             if (urlRefferer.ToString() == userListUrl)
             {
                 return RedirectToAction("UserList", "Account");

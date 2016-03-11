@@ -30,7 +30,15 @@
     {
         @Html.ActionLink("Redigera", "Edit", new { id = Model.Id })
     }
-    @if(Request.UrlReferrer.LocalPath == "/Home/Student")
+
+</p>
+
+<hr />
+<h3>Dokument för aktiviteten</h3>
+@Html.Partial("_DocumentPartial", (List<LMS.Models.Document>)ViewBag.DocumentModel)
+
+<p>
+    @if (Request.UrlReferrer.LocalPath == "/Home/Student")
     {
         @Html.ActionLink("Tillbaka", "Student", "Home")
     }
@@ -39,4 +47,3 @@
         @Html.ActionLink("Tillbaka", "Details", "Courses", new { id = Model.CourseId }, null)
     }
 </p>
-

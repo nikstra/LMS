@@ -48,6 +48,8 @@ namespace LMS.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<LMS.Models.Document> Documents { get; set; }
+
         // This line was added when scaffolding the view for Groups.UsersInGroup() based on ApplicationUsers. This causes the following exception to be thrown:
         // Multiple object sets per type are not supported. The object sets 'ApplicationUsers' and 'Users' can both contain instances of type 'LMS.Models.ApplicationUser'.
         //public System.Data.Entity.DbSet<LMS.Models.ApplicationUser> ApplicationUsers { get; set; }

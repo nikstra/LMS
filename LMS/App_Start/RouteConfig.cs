@@ -13,6 +13,13 @@ namespace LMS
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Route to get the parent of the partial upload view.
+            routes.MapRoute(
+                name: "DocumentsManagement", // Route name
+                url: "Documents/{action}/{type}/{id}",  // URL with parameters
+                defaults: new { controller = "Documents", action = "Upload", type = UrlParameter.Optional, id = UrlParameter.Optional }  // Parameter defaults
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

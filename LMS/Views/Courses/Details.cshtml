@@ -25,6 +25,10 @@
 
 </div>
 
+<hr />
+<h3>Dokument för kursen</h3>
+@Html.Partial("_DocumentPartial", (List<LMS.Models.Document>)ViewBag.DocumentModel)
+
 <p>
     @*@Html.ActionLink("Redigera", "Edit", new { id = Model.Id }) |*@
     @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)

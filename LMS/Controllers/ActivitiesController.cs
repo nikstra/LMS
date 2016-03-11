@@ -38,14 +38,26 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if(User.IsInRole(LMSConstants.RoleTeacher))
-                ViewBag.IsAdministrator = true;
-
             Activity activity = db.Activities.Find(id);
             if (activity == null)
             {
                 return HttpNotFound();
             }
+
+            TempData["ActivityId"] = activity.Id;
+            TempData["DocumentParent"] = LMSConstants.Activity;
+
+
+            ViewBag.DocumentModel = db.Documents
+                .Where(d => d.ActivityId == id)
+                .ToList();
+
+            if (User.IsInRole(LMSConstants.RoleTeacher))
+            {
+                TempData["IsAdministator"] = true;
+                ViewBag.IsAdministrator = true;
+            }
+
             return View(activity);
         }
 

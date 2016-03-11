@@ -1,0 +1,81 @@
+﻿@model LMS.Models.Document
+
+@{
+    ViewBag.Title = "Radera";
+}
+
+<h2>Radera</h2>
+
+<h3>Vill du radera denna fil?</h3>
+<div>
+    @*<h4>Document</h4>*@
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            <big>@Html.DisplayFor(model => model.Name)</big>
+        </dd>
+    </dl>
+    <dl class="dl-horizontal">
+
+        <dt>
+            Dokumentägare
+            @*@Html.DisplayNameFor(model => model.ApplicationUser.UserName)*@
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(User.Identity.) @Html.DisplayFor(modelItem => model.ApplicationUser.LastName)*@
+            @Html.DisplayFor(model => model.ApplicationUser.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @if (Model.Description != null)
+            {
+                @Html.DisplayFor(model => model.Description)
+            }
+            else
+            {
+                <span>Ingen beskrivning</span>
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Feedback)
+        </dt>
+
+        <dd>
+            @*@if (true)*@
+            @if (Model.Feedback != null)
+            {
+                <span>Finns</span>
+            }
+            @*@Html.DisplayFor(model => model.Feedback)*@
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeStamp)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Radera" class="btn btn-default" /> |
+            @Html.ActionLink("Tillbaka", "Index")
+        </div>
+    }
+</div>

@@ -24,7 +24,7 @@ namespace LMS.Controllers
         }
 
         // GET: Courses/Details/5
-    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
+        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,12 +36,20 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
+
+            TempData["CourseId"] = course.Id;
+            TempData["DocumentParent"] = LMSConstants.Course;
+
+            ViewBag.DocumentModel = db.Documents
+                .Where(d => d.CourseId == id)
+                .ToList();
+
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
                 ViewBag.IsAdministrator = true;
                 return View(course);
             }
-            else
+
             return View(course);
         }
 

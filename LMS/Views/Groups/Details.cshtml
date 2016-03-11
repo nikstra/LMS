@@ -25,6 +25,11 @@
 
 </div>
 
+
+<hr />
+<h3>Dokument för gruppen</h3>
+@Html.Partial("_DocumentPartial", (List<LMS.Models.Document>)ViewBag.DocumentModel)
+
 @if (ViewBag.IsAdministrator == true)
 {
     <p>

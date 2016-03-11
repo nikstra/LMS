@@ -44,7 +44,7 @@ namespace LMS.Controllers
             var currentAction = rd.GetRequiredString("action");
             var currentController = rd.GetRequiredString("controller");
 
-            TempData["GroupId"] = group.Id;
+            TempData["ParentId"] = group.Id;
             TempData["DocumentParent"] = LMSConstants.Group;
 
             ViewBag.DocumentModel = db.Documents

@@ -106,17 +106,29 @@ namespace LMS.Controllers
                         LocalPath = @"~/App_Data/uploads/" + fileName
                     };
 
+                    string action = "Index";
                     //var t = type;
                     //Request.UrlReferrer.LocalPath == "/Home/Student";
                     if (type == LMSConstants.Activity)
-                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"];
+                    {
+                        action = LMSConstants.Activity;
+                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"]; 
+                    }
                     else if (User.IsInRole(LMSConstants.RoleStudent))
+                    {
+                        action = "";
                         uploadDocument.GroupId = id; //activeUser.GroupId;
+                    }
                     else if (type == LMSConstants.Course)
+                    {
+                        action = LMSConstants.Course;
                         uploadDocument.CourseId = id; //(int?)TempData["CourseId"];
+                    }
                     else if (type == LMSConstants.Group)
+                    {
+                        action = LMSConstants.Group;
                         uploadDocument.GroupId = id; // (int?)TempData["GroupId"];
-
+                    }
                     //var vc = new ControllerContext();
                     //var parentActionViewContext = ControllerContext.ParentActionViewContext;
                     ////Session.
@@ -134,7 +146,8 @@ namespace LMS.Controllers
                     db.SaveChanges();
                 }
                 //db.SaveChanges();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return RedirectToAction("Details", type, new { id = id });
             }
 
             ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);

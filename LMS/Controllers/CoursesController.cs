@@ -37,7 +37,8 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-            TempData["CourseId"] = course.Id;
+//            TempData["CourseId"] = course.Id;
+            TempData["ParentId"] = course.Id;
             TempData["DocumentParent"] = LMSConstants.Course;
 
             ViewBag.DocumentModel = db.Documents
@@ -46,6 +47,7 @@ namespace LMS.Controllers
 
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
+                TempData["IsAdministator"] = true;
                 ViewBag.IsAdministrator = true;
                 return View(course);
             }

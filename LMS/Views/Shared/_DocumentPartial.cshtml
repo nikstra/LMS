@@ -1,11 +1,19 @@
 ﻿@model IEnumerable<LMS.Models.Document>
 
-@if(TempData["IsAdministator"] != null)
+@if (TempData["IsAdministator"] != null) 
 {
     <p>
-        @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = TempData["GroupId"] }), null)
+        @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = TempData["ParentId"] }), null)
     </p>
 }
+@if (TempData["Assignment"] != null && TempData["IsAdministator"] == null)
+{
+    <p>
+        @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = LMS.Constants.LMSConstants.Activity, id = TempData["ParentId"] }), null)
+    </p>
+}
+
+
     <table class="table">
     <tr>
         <th class="col-md-2">
@@ -35,6 +43,7 @@
     <tr>
         <td class="col-md-2">
             @*@Html.DisplayFor(modelItem => item.Name)*@
+            @if (TempData["DocumentParent"] == null) { TempData["DocumentParent"] = "document"; }
             @Html.ActionLink(item.Name, "Download", "Documents",
                                 new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }),
                                 new Dictionary<string, object> { {"title", "Ladda ned fil"} })

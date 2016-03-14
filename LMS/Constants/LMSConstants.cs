@@ -9,8 +9,8 @@ namespace LMS.Constants
     {
         public const string RoleTeacher = "teacher";
         public const string RoleStudent = "student";
-        public const string Activity = "activity";
-        public const string Course = "course";
-        public const string Group = "group";
+        public const string Activity = "Activities";
+        public const string Course = "Courses";
+        public const string Group = "Groups";
     }
 }

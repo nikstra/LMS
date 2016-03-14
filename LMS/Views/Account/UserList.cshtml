@@ -102,6 +102,7 @@
     </td>*@
 
         <td>
+            @Html.ActionLink("Detaljer","UserDetails", "Account", new { id = item.Id }, null) |
             @Html.ActionLink("Redigera", "EditUser", "Account", new { id = item.Id }, null) |
             @Html.ActionLink("Radera", "DeleteUser", "Account", new { id = item.Id }, null)
             @*@Html.ActionLink("Redigera", "Edit", new { id=item.Id })

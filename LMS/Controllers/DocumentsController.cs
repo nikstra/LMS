@@ -36,13 +36,19 @@ namespace LMS.Controllers
         }
 
         // GET: Documents/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string type, int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Document document = db.Documents.Find(id);
+                //.Include(d => d.Group.Name).Where(d => d.Id == id).FirstOrDefault();//
+            ////if (type == LMSConstants.Group)
+            //    var dbdoc = db.Documents.Include(d => d.Group.Name)
+            //        //.Where(d => d.Id == id).Find(id);
+            //    //document.Include();
+
             if (document == null)
             {
                 return HttpNotFound();
@@ -100,17 +106,29 @@ namespace LMS.Controllers
                         LocalPath = @"~/App_Data/uploads/" + fileName
                     };
 
+                    string action = "Index";
                     //var t = type;
                     //Request.UrlReferrer.LocalPath == "/Home/Student";
-                    if (User.IsInRole(LMSConstants.RoleStudent))
+                    if (type == LMSConstants.Activity)
+                    {
+                        action = LMSConstants.Activity;
+                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"]; 
+                    }
+                    else if (User.IsInRole(LMSConstants.RoleStudent))
+                    {
+                        action = "";
                         uploadDocument.GroupId = id; //activeUser.GroupId;
-                    else if (type == LMSConstants.Activity)
-                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"];
+                    }
                     else if (type == LMSConstants.Course)
+                    {
+                        action = LMSConstants.Course;
                         uploadDocument.CourseId = id; //(int?)TempData["CourseId"];
+                    }
                     else if (type == LMSConstants.Group)
+                    {
+                        action = LMSConstants.Group;
                         uploadDocument.GroupId = id; // (int?)TempData["GroupId"];
-
+                    }
                     //var vc = new ControllerContext();
                     //var parentActionViewContext = ControllerContext.ParentActionViewContext;
                     ////Session.
@@ -128,7 +146,8 @@ namespace LMS.Controllers
                     db.SaveChanges();
                 }
                 //db.SaveChanges();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return RedirectToAction("Details", type, new { id = id });
             }
 
             ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);

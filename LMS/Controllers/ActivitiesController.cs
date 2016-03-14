@@ -44,11 +44,12 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-//            TempData["ActivityId"] = activity.Id;
+            //            TempData["ActivityId"] = activity.Id;
             TempData["ParentId"] = activity.Id;
             TempData["DocumentParent"] = LMSConstants.Activity;
-            
-            if(activity.Type == ActivityType.Assignment)
+            TempData["ReturnPath"] = Request.FilePath;
+
+            if (activity.Type == ActivityType.Assignment)
             {
                 TempData["Assignment"] = true;
 

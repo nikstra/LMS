@@ -37,9 +37,10 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-//            TempData["CourseId"] = course.Id;
+            //            TempData["CourseId"] = course.Id;
             TempData["ParentId"] = course.Id;
             TempData["DocumentParent"] = LMSConstants.Course;
+            TempData["ReturnPath"] = Request.FilePath;
 
             ViewBag.DocumentModel = db.Documents
                 .Where(d => d.CourseId == id)
@@ -93,7 +94,7 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Course course = db.Courses.Find(id);
-            
+
             if (course == null)
             {
                 return HttpNotFound();

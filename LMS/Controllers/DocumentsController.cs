@@ -12,11 +12,13 @@ using LMS.Constants;
 
 namespace LMS.Controllers
 {
-    [Authorize(Roles=LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
+    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
     public class DocumentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         private DirectoryInfo _uploadDirInfo;
+
+        public object RouteTables { get; private set; }
 
         public DocumentsController()
         {
@@ -43,11 +45,16 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Document document = db.Documents.Find(id);
-                //.Include(d => d.Group.Name).Where(d => d.Id == id).FirstOrDefault();//
-            ////if (type == LMSConstants.Group)
-            //    var dbdoc = db.Documents.Include(d => d.Group.Name)
-            //        //.Where(d => d.Id == id).Find(id);
-            //    //document.Include();
+
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (User.IsInRole(LMSConstants.RoleTeacher) ||
+                document.ApplicationUserId == activeUser.Id)
+            {
+                TempData["CanViewFeedback"] = true;
+            }
 
             if (document == null)
             {
@@ -88,9 +95,6 @@ namespace LMS.Controllers
                         .Where(u => u.UserName == User.Identity.Name)
                         .FirstOrDefault();
 
-                    //@"~/App_Data/uploads"
-                    //Path.Combine(path, "uploads")
-
 
                     string fileName = Guid.NewGuid().ToString() + "_" + System.IO.Path.GetFileName(upload.FileName);
 
@@ -101,52 +105,35 @@ namespace LMS.Controllers
                         ApplicationUserId = activeUser.Id,
                         Description = document.Description,
                         /*Feedback = "",*/
-                        Name = upload.FileName,
+                        Name = System.IO.Path.GetFileName(upload.FileName),
                         TimeStamp = DateTime.Now,
                         LocalPath = @"~/App_Data/uploads/" + fileName
                     };
 
-                    string action = "Index";
-                    //var t = type;
                     //Request.UrlReferrer.LocalPath == "/Home/Student";
                     if (type == LMSConstants.Activity)
                     {
-                        action = LMSConstants.Activity;
-                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"]; 
+                        uploadDocument.ActivityId = id;
                     }
                     else if (User.IsInRole(LMSConstants.RoleStudent))
                     {
-                        action = "";
-                        uploadDocument.GroupId = id; //activeUser.GroupId;
+                        uploadDocument.GroupId = id;
                     }
                     else if (type == LMSConstants.Course)
                     {
-                        action = LMSConstants.Course;
-                        uploadDocument.CourseId = id; //(int?)TempData["CourseId"];
+                        uploadDocument.CourseId = id;
                     }
                     else if (type == LMSConstants.Group)
                     {
-                        action = LMSConstants.Group;
-                        uploadDocument.GroupId = id; // (int?)TempData["GroupId"];
+                        uploadDocument.GroupId = id;
                     }
-                    //var vc = new ControllerContext();
-                    //var parentActionViewContext = ControllerContext.ParentActionViewContext;
-                    ////Session.
-                    //if ((string)TempData["DocumentParent"] == "course")
-                    //    uploadDocument.CourseId = (int?)TempData["CourseId"];
-                    //else if ((string)TempData["DocumentParent"] == "activity")
-                    //    uploadDocument.ActivityId = (int?)TempData["ActivityId"];
-                    //else if ((string)TempData["DocumentParent"] == "group")
-                    //    uploadDocument.GroupId = (int?)TempData["GroupId"];
 
                     upload.SaveAs(localPath);
-                    //instructor.FilePaths = new List<Document>();
-                    //instructor.FilePaths.Add(photo);
+
                     db.Documents.Add(uploadDocument);
                     db.SaveChanges();
                 }
-                //db.SaveChanges();
-                //return RedirectToAction("Index");
+
                 return RedirectToAction("Details", type, new { id = id });
             }
 
@@ -169,6 +156,25 @@ namespace LMS.Controllers
             {
                 return HttpNotFound();
             }
+
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (User.IsInRole(LMSConstants.RoleTeacher))
+                TempData["CanEditFeedback"] = true;
+
+            if (User.IsInRole(LMSConstants.RoleTeacher) ||
+                document.ApplicationUserId == activeUser.Id)
+            {
+                TempData["CanViewFeedback"] = true;
+            }
+            else
+            {
+                //TempData["CanViewFeedback"] = null;
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);
             //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName", document.ApplicationUserId);
             ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", document.CourseId);
@@ -181,13 +187,63 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId," + /*ApplicationUserId,*/"CourseId,GroupId")] Document document)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId," + /*ApplicationUserId,*/"CourseId,GroupId")] Document document, FormCollection form)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(document).State = EntityState.Modified;
+                var documentToBeModified = db.Documents.First(d => d.Id == document.Id);
+                documentToBeModified.Name = document.Name;
+                documentToBeModified.Description = document.Description;
+                documentToBeModified.Feedback = document.Feedback;
+
+                var formMove = form["move"];
+                int value = 0;
+
+                if (formMove == LMSConstants.Activity)
+                {
+                    var a = form["ActivityId"];
+                    if (a != null)
+                    {
+                        if (Int32.TryParse(a, out value))
+                        {
+                            documentToBeModified.ActivityId = value;
+                            documentToBeModified.CourseId = null;
+                            documentToBeModified.GroupId = null;
+                        }
+                    }
+                }
+                else if (formMove == LMSConstants.Course)
+                {
+                    var c = form["CourseId"];
+                    if (c != null)
+                    {
+                        if (Int32.TryParse(c, out value))
+                        {
+                            documentToBeModified.ActivityId = null;
+                            documentToBeModified.CourseId = value;
+                            documentToBeModified.GroupId = null;
+                        }
+                    }
+                }
+                else if (formMove == LMSConstants.Group)
+                {
+                    var g = form["GroupId"];
+                    if (g != null)
+                    {
+                        if (Int32.TryParse(g, out value))
+                        {
+                            documentToBeModified.ActivityId = null;
+                            documentToBeModified.CourseId = null;
+                            documentToBeModified.GroupId = value;
+                        }
+                    }
+                }
+                //db.Entry(document).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if (TempData["ReturnPath"] != null)
+                    return Redirect((string)TempData["ReturnPath"]);
+                else
+                    return RedirectToAction("Index");
             }
             ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);
             //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName", document.ApplicationUserId);
@@ -247,17 +303,6 @@ namespace LMS.Controllers
             }
             return HttpNotFound();
         }
-
-        //protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        //{
-        //    if (filterContext.Controller.ControllerContext.ParentActionViewContext != null)
-        //    {
-        //        //filterContext.Controller.ViewBag.Area = filterContext.Controller.ValueProvider.GetValue("area").RawValue;
-        //        filterContext.Controller.ViewBag.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName; // filterContext.Controller.ValueProvider.GetValue("controller").RawValue;
-        //        filterContext.Controller.ViewBag.Action = filterContext.ActionDescriptor.ActionName; // filterContext.Controller.ValueProvider.GetValue("action").RawValue;
-        //        base.OnActionExecuted(filterContext);
-        //    }
-        //}
 
         protected override void Dispose(bool disposing)
         {

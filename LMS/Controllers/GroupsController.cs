@@ -46,6 +46,7 @@ namespace LMS.Controllers
 
             TempData["ParentId"] = group.Id;
             TempData["DocumentParent"] = LMSConstants.Group;
+            TempData["ReturnPath"] = Request.FilePath;
 
             ViewBag.DocumentModel = db.Documents
                 .Where(d => d.GroupId == id)
@@ -53,7 +54,7 @@ namespace LMS.Controllers
 
             // Students should be allowed to upload documents.
             TempData["IsAdministator"] = true;
-            
+
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
                 ViewBag.IsAdministrator = true;
@@ -198,63 +199,6 @@ namespace LMS.Controllers
 
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-
-
-        //public ActionResult _StudentsInGroup(Group group)
-        //{
-        //    if (group != null)
-        //    {
-        //        var usersInGroup = db.Users
-        //            .Where(u => u.GroupId == group.Id)
-        //            .OrderBy(u => u.FirstName)
-        //            ?? null;
-
-        //        TempData["ApplicationUsers"] = usersInGroup;
-        //    }
-        //    else
-        //    {
-        //        TempData["ApplicationUsers"] = new List<ApplicationUser>();
-        //    }
-
-        //    if (User.IsInRole(LMSConstants.RoleTeacher))
-        //    {
-        //        ViewBag.IsAdministrator = true;
-        //        return View(group);
-        //    }
-        //    else
-        //        return View(group);
-        //}
-
-
-        //public ActionResult Student()
-        //{
-        //    var currentUser = UserManager.FindById(User.Identity.GetUserId());
-
-        //    if (currentUser.GroupId != null)
-        //    {
-        //        var usersInGroup = db.Users
-        //            .Where(u => u.GroupId == currentUser.GroupId)
-        //            .OrderBy(u => u.FirstName)
-        //            ?? null;
-
-        //        TempData["ApplicationUsers"] = usersInGroup;
-        //    }
-        //    else
-        //    {
-        //        TempData["ApplicationUsers"] = new List<ApplicationUser>();
-        //    }
-
-        //    var upcomingActivities = db.Activities
-        //        .Where(a => a.EndDate >= DateTime.Now)
-        //        .Where(a => a.Course.GroupId == currentUser.GroupId)
-        //        .OrderBy(a => a.StartDate)
-        //        .Take(10)
-        //        .ToList();
-
-        //    return View(upcomingActivities);
-        //    //return View(db.Activities.ToList());
-        //}
-
 
         protected override void Dispose(bool disposing)
         {

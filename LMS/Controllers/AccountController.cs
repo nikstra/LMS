@@ -26,31 +26,6 @@ namespace LMS.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
 
-        public ActionResult UserList()
-        {
-
-            var userList = new List<UserViewModel>();
-            foreach (var user in db.Users.ToList())
-            {
-                var userRolesId = user.Roles.Select(m => m.RoleId).ToList();
-                var model = new UserViewModel()
-                {
-                    Id = user.Id,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber,
-                    RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name
-
-                };
-                userList.Add(model);
-            }
-
-            var sortedUserList = userList.OrderBy(g=> g.FirstName);
-            return View(sortedUserList);
-
-        }
-
         public AccountController()
         {
         }
@@ -167,21 +142,49 @@ namespace LMS.Controllers
                     return View(model);
             }
         }
-
+        
+        //GET: /Account/UserList
         [Authorize(Roles = LMSConstants.RoleTeacher)]
+        public ActionResult UserList()
+        {
+
+            var userList = new List<UserViewModel>();
+            foreach (var user in db.Users.ToList())
+            {
+                var userRolesId = user.Roles.Select(m => m.RoleId).ToList();
+                var model = new UserViewModel()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name
+
+                };
+                userList.Add(model);
+            }
+
+            var sortedUserList = userList.OrderBy(g=> g.FirstName);
+            return View(sortedUserList);
+
+        }
+
         // GET: /Account/Register
         [AllowAnonymous]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult Register()
         {
+            TempData["UrlReferrer"] = Request.UrlReferrer.LocalPath;
             ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
             return View();
         }
 
-        [Authorize(Roles = LMSConstants.RoleTeacher)]
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
 
@@ -231,8 +234,13 @@ namespace LMS.Controllers
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                        return RedirectToAction("Register", "Account");
+                        
+                        if ((string)TempData["UrlReferrer"] == "/Groups/Details/" + model.GroupId)
+                        {
+                            return RedirectToAction("Details", "Groups", new { id = model.GroupId});
+                        }
+                        else
+                        return RedirectToAction("UserList", "Account");
                     }
                     AddErrors(result);
                 }

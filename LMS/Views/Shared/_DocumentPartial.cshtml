@@ -19,7 +19,7 @@
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.Name)
         </th>
-        <th class="col-md-3">
+        <th class="col-md-2">
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th class="col-md-1">
@@ -34,7 +34,7 @@
         </th>
         @if (TempData["IsAdministator"] != null)
         {
-            <th class="col-md-2"></th>
+            <th class="col-md-3"></th>
         }
     </tr>
 
@@ -50,7 +50,7 @@
                 @*@Html.ActionLink(item.Name, "Download", "Documents", new { id = item.Id }, new { title = "Ladda ned fil" })*@
                 @*@Html.Hyperlink(System.Web.HttpContext.Current.Server.MapPath(item.LocalPath), item.Name)*@
             </td>
-            <td class="col-md-3">
+            <td class="col-md-2">
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td class="col-md-1">
@@ -68,7 +68,7 @@
             </td>
             @if (TempData["IsAdministator"] != null)
             {
-                <td class="col-md-2">
+                <td class="col-md-3">
                     @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) |
                     @Html.ActionLink("Detaljer", "Details", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) |
                     @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null)

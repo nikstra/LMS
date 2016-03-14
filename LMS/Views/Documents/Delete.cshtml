@@ -101,7 +101,20 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Radera" class="btn btn-default" /> |
-            @Html.ActionLink("Tillbaka", "Index")
+            @*@Html.ActionLink("Tillbaka", "Index")*@
+            @{
+                // Information about usage of TempData.
+                // http://computerauthor.blogspot.se/2014/09/mvc-tempdata-peek-and-keep-confusion_14.html
+                if (TempData.Peek("ReturnPath") != null)
+                {
+                    @Html.Hyperlink((string)TempData["ReturnPath"], "Tillbaka");
+                                                                               TempData.Keep("ReturnPath");
+                }
+                else
+                {
+                    @Html.Hyperlink(Request.UrlReferrer.ToString(), "Tillbaka");
+                }
+            }
         </div>
     }
 </div>

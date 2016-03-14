@@ -309,10 +309,7 @@ namespace LMS.Controllers
                 {
                     return RedirectToAction("UserList", "Account");
                 }
-                else if (urlRefferer.ToString() == userDetails)
-                {
-                    return RedirectToAction("UserDetails", "Account", new { id = currentUser.Id });
-                }
+                else
                 return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
             }
             return View(currentUser);
@@ -360,6 +357,7 @@ namespace LMS.Controllers
             {
                 return RedirectToAction("UserList", "Account");
             }
+            else
             return RedirectToAction("Details", "Groups", new { id = groupId });
         }
 

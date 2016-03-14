@@ -16,6 +16,11 @@
         {
             <h5 style="color: red">@Html.ViewBag.Error</h5>
         }
+        
+        @*@if (ViewBag.Succeeded != null)
+        {
+            <h5 style="color: red">@Html.ViewBag.Succeeded</h5>
+        }*@
     </div>
     @Html.ValidationSummary("", new { @class = "text-danger" })
 
@@ -90,6 +95,18 @@
         </div>
     </div>
 }
+
+<p>
+    @if (Request.UrlReferrer.LocalPath == "/Account/UserList")
+    {
+        @Html.ActionLink("Tillbaka", "UserList", "Account")
+    }
+
+    else if (Request.UrlReferrer.LocalPath == "/Groups/Details/" + TempData["ParentId"])
+    {
+        @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)
+    }
+</p>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

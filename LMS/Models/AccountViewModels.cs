@@ -68,7 +68,7 @@ namespace LMS.Models
         [Display(Name = "Roll")]
         public Role Role { get; set; }
 
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         
         [Display(Name = "Grupp")]
         public Group Group { get; set; }

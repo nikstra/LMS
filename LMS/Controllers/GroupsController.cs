@@ -47,6 +47,8 @@ namespace LMS.Controllers
             TempData["ParentId"] = group.Id;
             TempData["DocumentParent"] = LMSConstants.Group;
             TempData["ReturnPath"] = Request.FilePath;
+            TempData["GroupName"] = group.Name;
+            TempData["GroupId"] = group.Id;
 
             ViewBag.DocumentModel = db.Documents
                 .Where(d => d.GroupId == id)

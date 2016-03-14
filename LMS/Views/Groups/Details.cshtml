@@ -33,7 +33,7 @@
         @if (ViewBag.IsAdministrator == true)
         {
             <div class="col-md-4 col-lg-offset-1 well">
-                @Html.Partial("_StudentsInGroup")
+                @Html.Partial("_StudentsInGroup",ViewData["ParentId"])
             </div>
         }
     </div>

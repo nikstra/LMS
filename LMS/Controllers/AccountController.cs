@@ -142,7 +142,7 @@ namespace LMS.Controllers
                     return View(model);
             }
         }
-        
+
         //GET: /Account/UserList
         [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult UserList()
@@ -165,7 +165,7 @@ namespace LMS.Controllers
                 userList.Add(model);
             }
 
-            var sortedUserList = userList.OrderBy(g=> g.FirstName);
+            var sortedUserList = userList.OrderBy(g => g.FirstName);
             return View(sortedUserList);
 
         }
@@ -196,11 +196,18 @@ namespace LMS.Controllers
             }
             else
             {
+                //model.GroupId = (int)TempData["GroupId"];
+                //var group = db.Groups.Find((int)TempData["GroupId"]);
+                //model.Group = group;
 
 
                 if (ModelState.IsValid)
                 {
-
+                    if (TempData["NoGroup"] != null)
+                    {
+                        model.GroupId = null;
+                    }
+                    
 
                     var user = new ApplicationUser()
                     {
@@ -211,7 +218,6 @@ namespace LMS.Controllers
                         PhoneNumber = model.PhoneNumber,
                         GroupId = model.GroupId
                     };
-
 
                     var result = await UserManager.CreateAsync(user, model.Password);
 
@@ -234,13 +240,13 @@ namespace LMS.Controllers
                         // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                         // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                         // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                        
+
                         if ((string)TempData["UrlReferrer"] == "/Groups/Details/" + model.GroupId)
                         {
-                            return RedirectToAction("Details", "Groups", new { id = model.GroupId});
+                            return RedirectToAction("Details", "Groups", new { id = model.GroupId });
                         }
                         else
-                        return RedirectToAction("UserList", "Account");
+                            return RedirectToAction("UserList", "Account");
                     }
                     AddErrors(result);
                 }
@@ -257,7 +263,7 @@ namespace LMS.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             ApplicationUser currentUser = db.Users.Find(id);
 
             if (User.IsInRole(LMSConstants.RoleTeacher))
@@ -318,7 +324,7 @@ namespace LMS.Controllers
                     return RedirectToAction("UserList", "Account");
                 }
                 else
-                return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
+                    return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
             }
             return View(currentUser);
         }
@@ -366,7 +372,7 @@ namespace LMS.Controllers
                 return RedirectToAction("UserList", "Account");
             }
             else
-            return RedirectToAction("Details", "Groups", new { id = groupId });
+                return RedirectToAction("Details", "Groups", new { id = groupId });
         }
 
 

@@ -1,5 +1,9 @@
 ﻿@model LMS.Models.RegisterViewModel
 @using LMS.Models;
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/HideShowGroup.js")" type="text/javascript"></script>
+
 @{
     ViewBag.Title = "Registrera användare";
 }
@@ -11,36 +15,55 @@
     @Html.AntiForgeryToken()
     <h4>Skapa konto</h4>
     <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
     <div>
         @if (ViewBag.Error != null)
         {
             <h5 style="color: red">@Html.ViewBag.Error</h5>
         }
-        
-        @*@if (ViewBag.Succeeded != null)
-        {
-            <h5 style="color: red">@Html.ViewBag.Succeeded</h5>
-        }*@
     </div>
-    @Html.ValidationSummary("", new { @class = "text-danger" })
+    
+   
+    
+    if (Request.UrlReferrer.LocalPath == (string)TempData["ReturnPath"])
+    {
+        @Html.Hidden("GroupId", TempData["GroupId"])
+    
+        <div class="form-group">
+            <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.Role)</div>
+            <div class="col-md-10">
+                <div class="text-value">@Html.DisplayFor(model => model.Role)</div>
+            </div>
+        </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Role, "Roll", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.Group)</div>
         <div class="col-md-10">
-            @Html.DropDownList("Role", EnumHelper.GetSelectList(typeof(Role)), htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+            <div class="text-value">@TempData["GroupName"]</div>
         </div>
     </div>
 
-    
-    <div class="form-group">
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Role, "Roll", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("Role", EnumHelper.GetSelectList(typeof(Role)), htmlAttributes: new { @class = "form-control", @id="role" })
+                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    <div class="form-group lms-hidden">
         @Html.LabelFor(model => model.Group, "Grupp", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             @Html.DropDownList("GroupId", null, htmlAttributes: new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    
+        TempData["NoGroup"] = "teacher";
+    }
     @*<div class="form-group">
         @Html.LabelFor(model => model.Group, "Grupp", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">

@@ -6,7 +6,7 @@
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = TempData["ParentId"] }), null)
     </p>
 }
-@if (TempData["Assignment"] != null && TempData.Peek("IsAdministator") == null)
+@if (TempData.Peek("Assignment") != null && TempData.Peek("IsAdministator") == null)
 {
     <p>
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = LMS.Constants.LMSConstants.Activity, id = TempData["ParentId"] }), null)
@@ -68,11 +68,14 @@
                 @Html.DisplayFor(modelItem => item.TimeStamp)
             </td>
             <td class="col-md-3">
-                @if (TempData["IsAdministator"] != null || item.ApplicationUserId == (string)TempData.Peek("UserId"))
+                @if (TempData.Peek("IsAdministator") != null || item.ApplicationUserId == (string)TempData.Peek("UserId"))
                 {
-                    @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
-                    @Html.ActionLink("Detaljer", "Details", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
-                    @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null)
+                    if(TempData.Peek("IsAdministator") != null  || (bool)TempData.Peek("Assignment") != true)
+                    {
+                        @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
+                        @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
+                    }
+                    @Html.ActionLink("Detaljer", "Details", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null)
                 }
             </td>
         </tr>

@@ -40,10 +40,15 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-            var rd = ControllerContext.RouteData;
-            var currentAction = rd.GetRequiredString("action");
-            var currentController = rd.GetRequiredString("controller");
+            //var rd = ControllerContext.RouteData;
+            //var currentAction = rd.GetRequiredString("action");
+            //var currentController = rd.GetRequiredString("controller");
 
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            TempData["UserId"] = activeUser.Id;
             TempData["ParentId"] = group.Id;
             TempData["DocumentParent"] = LMSConstants.Group;
             TempData["ReturnPath"] = Request.FilePath;
@@ -52,11 +57,9 @@ namespace LMS.Controllers
                 .Where(d => d.GroupId == id)
                 .ToList();
 
-            // Students should be allowed to upload documents.
-            TempData["IsAdministator"] = true;
-
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
+                TempData["IsAdministator"] = true;
                 ViewBag.IsAdministrator = true;
                 return View(group);
             }

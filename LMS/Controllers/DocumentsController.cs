@@ -34,6 +34,12 @@ namespace LMS.Controllers
             if (User.IsInRole(LMSConstants.RoleTeacher))
                 TempData["IsAdministator"] = true;
 
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            TempData["UserId"] = activeUser.Id;
+            
             return View(documents.ToList());
         }
 
@@ -240,7 +246,7 @@ namespace LMS.Controllers
                 }
                 //db.Entry(document).State = EntityState.Modified;
                 db.SaveChanges();
-                if (TempData["ReturnPath"] != null)
+                if (TempData.Peek("ReturnPath") != null)
                     return Redirect((string)TempData["ReturnPath"]);
                 else
                     return RedirectToAction("Index");
@@ -274,7 +280,18 @@ namespace LMS.Controllers
         {
             Document document = db.Documents.Find(id);
 
-            // Delete file!
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
+            if (activeUser.Id != document.ApplicationUserId && !User.IsInRole(LMSConstants.RoleTeacher))
+            {
+                if (TempData["ReturnPath"] != null)
+                    return Content(@"Behörighet saknas <a href='" + TempData["ReturnPath"] + "'>Tillbaka</a>");
+                else
+                    return Content(@"Behörighet saknas <a href='/'>Hem</a>");
+            }
+
             string fullPath = System.Web.HttpContext.Current.Server.MapPath(document.LocalPath);
 
             if (System.IO.File.Exists(fullPath))
@@ -284,7 +301,10 @@ namespace LMS.Controllers
 
             db.Documents.Remove(document);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            if (TempData.Peek("ReturnPath") != null)
+                return Redirect((string)TempData["ReturnPath"]);
+            else
+                return RedirectToAction("Index");
         }
 
         public ActionResult Download(string type, int? id)

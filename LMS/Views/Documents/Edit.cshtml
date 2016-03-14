@@ -1,5 +1,8 @@
 ﻿@model LMS.Models.Document
 
+<script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/HideShowTypes.js")" type="text/javascript"></script>
+
 @{
     ViewBag.Title = "Redigera";
 }
@@ -10,12 +13,90 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Dokument</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            <div class="control-label col-md-2 text-value-label">Dokumentägare</div>
+            <div class="col-md-10">
+                <div class="text-value">@Model.ApplicationUser.UserName</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.TimeStamp)</div>
+            <div class="col-md-10">
+                <div class="text-value">@Model.TimeStamp</div>
+            </div>
+        </div>
+
+        @if (Model.Activity != null)
+        {
+            <div class="form-group">
+                <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.Activity)</div>
+                <div class="col-md-10">
+                    <div class="text-value">@Model.Activity.Name</div>
+                </div>
+            </div>
+        }
+        else if (Model.Course != null)
+        {
+            <div class="form-group">
+                <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.Course)</div>
+                <div class="col-md-10">
+                    <div class="text-value">@Model.Course.Name</div>
+                </div>
+            </div>
+        }
+        else if (Model.Group != null)
+        {
+            <div class="form-group">
+                <div class="control-label col-md-2 text-value-label">@Html.DisplayNameFor(model => model.Group)</div>
+                <div class="col-md-10">
+                    <div class="text-value">@Model.Group.Name</div>
+                </div>
+            </div>
+        }
+
+        <div class="form-group">
+            <label for="move" class="control-label col-md-2">Flytta</label>
+            <div class="col-md-10">
+                <select id="move" name="move" class="form-control">
+                    <option value="0">inte dokumentet</option>
+                    <option value=@LMS.Constants.LMSConstants.Group>till grupp</option>
+                    <option value=@LMS.Constants.LMSConstants.Course>till kurs</option>
+                    <option value=@LMS.Constants.LMSConstants.Activity>till aktivitet</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group lms-hidden lms-Activities collapse">
+            @Html.LabelFor(model => model.ActivityId, "ny aktivtet", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ActivityId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group lms-hidden lms-Courses collapse">
+            @Html.LabelFor(model => model.CourseId, "ny kurs", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group lms-hidden lms-Groups collapse">
+            @Html.LabelFor(model => model.GroupId, "ny grupp", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("GroupId", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -36,56 +117,27 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Feedback, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Feedback, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Feedback, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TimeStamp, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.TimeStamp, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TimeStamp, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.LocalPath, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LocalPath, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LocalPath, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.ApplicationUserId, "ApplicationUserId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ApplicationUserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ApplicationUserId, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ActivityId, "ActivityId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ActivityId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseId, "CourseId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GroupId, "GroupId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("GroupId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+                @if (TempData["CanEditFeedback"] != null)
+                {
+                    @Html.EditorFor(model => model.Feedback, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Feedback, "", new { @class = "text-danger" })
+                }
+                else
+                {
+                    <div class="text-value">
+                        @if (Model.Feedback != null)
+                        {
+                            if (TempData.Peek("CanViewFeedback") != null)
+                            {
+                                @Model.Feedback
+                            }
+                            else
+                            {
+                                <span>Finns</span>
+                            }
+                        }
+                    </div>
+                }
             </div>
         </div>
 
@@ -98,7 +150,19 @@
 }
 
 <div>
-    @Html.ActionLink("Tillbaka", "Index")
+    @{
+        // Information about usage of TempData.
+        // http://computerauthor.blogspot.se/2014/09/mvc-tempdata-peek-and-keep-confusion_14.html
+        if (TempData.Peek("ReturnPath") != null)
+        {
+            @Html.Hyperlink((string)TempData["ReturnPath"], "Tillbaka");
+                                                                       TempData.Keep("ReturnPath");
+        }
+        else
+        {
+            @Html.Hyperlink(Request.UrlReferrer.ToString(), "Tillbaka");
+        }
+    }
 </div>
 
 @section Scripts {

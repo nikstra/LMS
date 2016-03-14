@@ -4,12 +4,10 @@
     ViewBag.Title = "Index";
 }
 <h4>Deltagare</h4>
-@if (ViewBag.IsAdministrator == true)
-{
-    <p>
-        @Html.ActionLink("Lägg till en ny student", "Register", "Account", new { id = Model.Id }, null)
-    </p>
-}
+<p>
+    @Html.ActionLink("Lägg till en ny student", "Register", "Account", new { id = Model.Id }, null)
+</p>
+
 <table class="table">
 
     <tr>
@@ -21,20 +19,10 @@
             <td>
                 @Html.ActionLink(user.FirstName + " " + user.LastName, "UserDetails", "Account", new { id = user.Id }, null)
             </td>
-            @if (ViewBag.IsAdministrator == true)
-            {
-                <td>
-                    @Html.ActionLink("Redigera", "EditUser", "Account", new { id = user.Id }, null) |
-                    @Html.ActionLink("Radera", "DeleteUser", "Account", new { id = user.Id }, null)
-                </td>
-            }
+            <td>
+                @Html.ActionLink("Redigera", "EditUser", "Account", new { id = user.Id }, null) |
+                @Html.ActionLink("Radera", "DeleteUser", "Account", new { id = user.Id }, null)
+            </td>
         </tr>
     }
 </table>
-
-
-
-@*<h4>Gruppdeltagare</h4>*@
-@*@model IEnumerable<lms.models.applicationuser>*@
-@*@{Html.RenderAction("UsersInGroup", "Groups");}*@
-@*@Html.Partial("_UsersInGroupPartial", TempData["ApplicationUsers"])*@

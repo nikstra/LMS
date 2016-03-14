@@ -46,6 +46,7 @@ namespace LMS.Controllers
 
             TempData["ParentId"] = group.Id;
             TempData["DocumentParent"] = LMSConstants.Group;
+            TempData["ReturnPath"] = Request.FilePath;
 
             ViewBag.DocumentModel = db.Documents
                 .Where(d => d.GroupId == id)
@@ -53,7 +54,7 @@ namespace LMS.Controllers
 
             // Students should be allowed to upload documents.
             TempData["IsAdministator"] = true;
-            
+
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
                 ViewBag.IsAdministrator = true;

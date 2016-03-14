@@ -103,3 +103,20 @@ ul.nav a:hover {
     margin-left: 0px;
     margin-right: 0px;
 }
+
+.text-value {
+    background: transparent;
+    border: none;
+    cursor: text !important;
+    height: 34px;
+    max-width: 280px;
+    padding: 6px 12px;
+    vertical-align: middle;
+}
+
+.text-value-label {
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    cursor: text !important;
+}

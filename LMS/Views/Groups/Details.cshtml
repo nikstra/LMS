@@ -18,12 +18,24 @@
 </div>
 <div>
     <div class="row no-margins">
-        <div class="col-md-7 well">
-            @Html.Partial("_CoursesInGroup")
-        </div>
-        <div class="col-md-4 col-lg-offset-1 well">
-            @Html.Partial("_StudentsInGroup")
-        </div>
+        @if (ViewBag.IsAdministrator == true)
+        {
+            <div class="col-md-7 well">
+                @Html.Partial("_CoursesInGroup")
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12 well">
+                @Html.Partial("_CoursesInGroup")
+            </div>
+        }
+        @if (ViewBag.IsAdministrator == true)
+        {
+            <div class="col-md-4 col-lg-offset-1 well">
+                @Html.Partial("_StudentsInGroup")
+            </div>
+        }
     </div>
 
 </div>

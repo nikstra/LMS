@@ -44,12 +44,23 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-            //            TempData["ActivityId"] = activity.Id;
             TempData["ParentId"] = activity.Id;
             TempData["DocumentParent"] = LMSConstants.Activity;
             TempData["ReturnPath"] = Request.FilePath;
 
-            if (activity.Type == ActivityType.Assignment)
+            if (activity.Type == ActivityType.Assignment && User.IsInRole(LMSConstants.RoleTeacher))
+            {
+                TempData["Assignment"] = true;
+
+                var activeUser = db.Users
+                    .Where(u => u.UserName == User.Identity.Name)
+                    .FirstOrDefault();
+
+                ViewBag.DocumentModel = db.Documents // Filtrera ut inluppar??
+                    .Where(d => d.ActivityId == id && d.Activity.Type == ActivityType.Assignment)            //d.ApplicationUserId == activeUser.Id)
+                    .ToList();
+            }
+            else if (activity.Type == ActivityType.Assignment)
             {
                 TempData["Assignment"] = true;
 

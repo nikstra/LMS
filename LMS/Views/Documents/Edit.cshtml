@@ -61,43 +61,44 @@
                 </div>
             </div>
         }
-
-        <div class="form-group">
-            <label for="move" class="control-label col-md-2">Flytta</label>
-            <div class="col-md-10">
-                <select id="move" name="move" class="form-control">
-                    <option value="0">inte dokumentet</option>
-                    <option value=@LMS.Constants.LMSConstants.Group>till grupp</option>
-                    <option value=@LMS.Constants.LMSConstants.Course>till kurs</option>
-                    <option value=@LMS.Constants.LMSConstants.Activity>till aktivitet</option>
-                </select>
+        @if(User.IsInRole(LMS.Constants.LMSConstants.RoleTeacher))
+        {
+            <div class="form-group">
+                <label for="move" class="control-label col-md-2">Flytta</label>
+                <div class="col-md-10">
+                    <select id="move" name="move" class="form-control">
+                        <option value="0">inte dokumentet</option>
+                        <option value=@LMS.Constants.LMSConstants.Group>till grupp</option>
+                        <option value=@LMS.Constants.LMSConstants.Course>till kurs</option>
+                        <option value=@LMS.Constants.LMSConstants.Activity>till aktivitet</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group lms-hidden lms-Activities collapse">
-            @Html.LabelFor(model => model.ActivityId, "ny aktivtet", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ActivityId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
+            <div class="form-group lms-hidden lms-Activities collapse">
+                @Html.LabelFor(model => model.ActivityId, "ny aktivtet", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("ActivityId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ActivityId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group lms-hidden lms-Courses collapse">
-            @Html.LabelFor(model => model.CourseId, "ny kurs", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+            <div class="form-group lms-hidden lms-Courses collapse">
+                @Html.LabelFor(model => model.CourseId, "ny kurs", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("CourseId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.CourseId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group lms-hidden lms-Groups collapse">
-            @Html.LabelFor(model => model.GroupId, "ny grupp", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("GroupId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+            <div class="form-group lms-hidden lms-Groups collapse">
+                @Html.LabelFor(model => model.GroupId, "ny grupp", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("GroupId", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.GroupId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-
+        }
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

@@ -5,7 +5,7 @@
 }
 
 <h2>Kurs: @Html.DisplayFor(model => model.Name)</h2>
-<h4>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</h4>
+<h4>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate) <small>@Html.Hyperlink("#documents", "Dokument för kursen")</small></h4>
 
 <hr />
 

@@ -5,7 +5,7 @@
 }
 
 <h2>Grupp: @Html.DisplayFor(model => model.Name)</h2>
-<h4>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate)</h4>
+<h4>@Html.DisplayFor(model => model.StartDate) - @Html.DisplayFor(model => model.EndDate) <small>@Html.Hyperlink("#documents", "Dokument för gruppen")</small></h4>
 
 <hr />
 
@@ -14,7 +14,6 @@
     <h3>@Html.DisplayNameFor(model => model.Description)</h3>
 
     <p>@Html.DisplayFor(model => model.Description)</p>
-
 </div>
 <div>
     <div class="row no-margins">

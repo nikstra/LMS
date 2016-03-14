@@ -108,7 +108,7 @@
                 if (TempData.Peek("ReturnPath") != null)
                 {
                     @Html.Hyperlink((string)TempData["ReturnPath"], "Tillbaka");
-                                                                               TempData.Keep("ReturnPath");
+                    TempData.Keep("ReturnPath");
                 }
                 else
                 {

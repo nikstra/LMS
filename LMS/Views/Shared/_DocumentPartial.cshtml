@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<LMS.Models.Document>
-
-@if (TempData["IsAdministator"] != null)
+<a name="documents"></a>
+@if (TempData.Peek("IsAdministator") != null || TempData["DocumentParent"] == LMS.Constants.LMSConstants.Group)
 {
     <p>
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = TempData["ParentId"] }), null)
     </p>
 }
-@if (TempData["Assignment"] != null && TempData["IsAdministator"] == null)
+@if (TempData.Peek("Assignment") != null && TempData.Peek("IsAdministator") == null)
 {
     <p>
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = LMS.Constants.LMSConstants.Activity, id = TempData["ParentId"] }), null)
@@ -32,10 +32,11 @@
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.TimeStamp)
         </th>
-        @if (TempData["IsAdministator"] != null)
+        @*@if (TempData["IsAdministator"] != null)
         {
             <th class="col-md-3"></th>
-        }
+        }*@
+        <th class="col-md-3"></th>
     </tr>
 
     @foreach (var item in Model)
@@ -66,17 +67,17 @@
             <td class="col-md-2">
                 @Html.DisplayFor(modelItem => item.TimeStamp)
             </td>
-            @if (TempData["IsAdministator"] != null)
-            {
-                <td class="col-md-3">
-                    @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) |
-                    @Html.ActionLink("Detaljer", "Details", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) |
-                    @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null)
-                    @*@Html.ActionLink("Redigera", "Edit", "Documents", new { id = item.Id }, null) |
-                        @Html.ActionLink("Detaljer", "Details", "Documents", new { id = item.Id }, null) |
-                        @Html.ActionLink("Radera", "Delete", "Documents", new { id = item.Id }, null)*@
-                </td>
-            }
+            <td class="col-md-3">
+                @if (TempData.Peek("IsAdministator") != null || item.ApplicationUserId == (string)TempData.Peek("UserId"))
+                {
+                    if(TempData.Peek("IsAdministator") != null  || (bool)TempData.Peek("Assignment") != true)
+                    {
+                        @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
+                        @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
+                    }
+                    @Html.ActionLink("Detaljer", "Details", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null)
+                }
+            </td>
         </tr>
     }
 

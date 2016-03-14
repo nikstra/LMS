@@ -84,10 +84,10 @@
         </dd>*@
 
     </dl>
-<p>
+@*<p>
     @Html.ActionLink("Redigera", "EditUser", "Account", new { id = Model.Id }, null) |
     @Html.ActionLink("Radera", "DeleteUser", "Account", new { id = Model.Id }, null)
-</p>
+</p>*@
 </div>
 <p>
     @if (Request.UrlReferrer.LocalPath == "/Account/UserList")
@@ -98,7 +98,7 @@
     {
         @Html.ActionLink("Tillbaka", "UserDetails", "Account", new { id = Model.Id }, null)
     }
-    else
+    else if (Request.UrlReferrer.LocalPath == "/Groups/Details/" + Model.GroupId)
     {
         @Html.ActionLink("Tillbaka", "Details", "Groups", new { id = Model.GroupId }, null)
     }

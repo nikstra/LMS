@@ -32,7 +32,6 @@ namespace LMS.Controllers
 
         public ActionResult Index()
         {
-            // Temporarly using the about page as start page for authenticated users.
             ViewBag.ReturnUrl = "/Home/Index";
             ViewBag.Error = TempData["Error"];
 
@@ -43,12 +42,8 @@ namespace LMS.Controllers
                 else
                     return RedirectToAction("Student", "Home");
             }
-            return View();
 
-            // If user already authenticated, redirect to start page.
-            //if (User.Identity.IsAuthenticated)
-            //    return Redirect(ViewBag.ReturnUrl);
-            //return View();
+            return View();
         }
 
         public ActionResult About()
@@ -91,7 +86,6 @@ namespace LMS.Controllers
                 .ToList();
 
             return View(upcomingActivities);
-            //return View(db.Activities.ToList());
         }
     }
 }

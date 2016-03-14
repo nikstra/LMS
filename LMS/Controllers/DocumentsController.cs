@@ -45,11 +45,7 @@ namespace LMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Document document = db.Documents.Find(id);
-            //.Include(d => d.Group.Name).Where(d => d.Id == id).FirstOrDefault();//
-            ////if (type == LMSConstants.Group)
-            //    var dbdoc = db.Documents.Include(d => d.Group.Name)
-            //        //.Where(d => d.Id == id).Find(id);
-            //    //document.Include();
+
             var activeUser = db.Users
                 .Where(u => u.UserName == User.Identity.Name)
                 .FirstOrDefault();
@@ -99,9 +95,6 @@ namespace LMS.Controllers
                         .Where(u => u.UserName == User.Identity.Name)
                         .FirstOrDefault();
 
-                    //@"~/App_Data/uploads"
-                    //Path.Combine(path, "uploads")
-
 
                     string fileName = Guid.NewGuid().ToString() + "_" + System.IO.Path.GetFileName(upload.FileName);
 
@@ -117,47 +110,30 @@ namespace LMS.Controllers
                         LocalPath = @"~/App_Data/uploads/" + fileName
                     };
 
-                    string action = "Index";
-                    //var t = type;
                     //Request.UrlReferrer.LocalPath == "/Home/Student";
                     if (type == LMSConstants.Activity)
                     {
-                        action = LMSConstants.Activity;
-                        uploadDocument.ActivityId = id; //(int?)TempData["ActivityId"]; 
+                        uploadDocument.ActivityId = id;
                     }
                     else if (User.IsInRole(LMSConstants.RoleStudent))
                     {
-                        action = "";
-                        uploadDocument.GroupId = id; //activeUser.GroupId;
+                        uploadDocument.GroupId = id;
                     }
                     else if (type == LMSConstants.Course)
                     {
-                        action = LMSConstants.Course;
-                        uploadDocument.CourseId = id; //(int?)TempData["CourseId"];
+                        uploadDocument.CourseId = id;
                     }
                     else if (type == LMSConstants.Group)
                     {
-                        action = LMSConstants.Group;
-                        uploadDocument.GroupId = id; // (int?)TempData["GroupId"];
+                        uploadDocument.GroupId = id;
                     }
-                    //var vc = new ControllerContext();
-                    //var parentActionViewContext = ControllerContext.ParentActionViewContext;
-                    ////Session.
-                    //if ((string)TempData["DocumentParent"] == "course")
-                    //    uploadDocument.CourseId = (int?)TempData["CourseId"];
-                    //else if ((string)TempData["DocumentParent"] == "activity")
-                    //    uploadDocument.ActivityId = (int?)TempData["ActivityId"];
-                    //else if ((string)TempData["DocumentParent"] == "group")
-                    //    uploadDocument.GroupId = (int?)TempData["GroupId"];
 
                     upload.SaveAs(localPath);
-                    //instructor.FilePaths = new List<Document>();
-                    //instructor.FilePaths.Add(photo);
+
                     db.Documents.Add(uploadDocument);
                     db.SaveChanges();
                 }
-                //db.SaveChanges();
-                //return RedirectToAction("Index");
+
                 return RedirectToAction("Details", type, new { id = id });
             }
 
@@ -327,17 +303,6 @@ namespace LMS.Controllers
             }
             return HttpNotFound();
         }
-
-        //protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        //{
-        //    if (filterContext.Controller.ControllerContext.ParentActionViewContext != null)
-        //    {
-        //        //filterContext.Controller.ViewBag.Area = filterContext.Controller.ValueProvider.GetValue("area").RawValue;
-        //        filterContext.Controller.ViewBag.Controller = filterContext.ActionDescriptor.ControllerDescriptor.ControllerName; // filterContext.Controller.ValueProvider.GetValue("controller").RawValue;
-        //        filterContext.Controller.ViewBag.Action = filterContext.ActionDescriptor.ActionName; // filterContext.Controller.ValueProvider.GetValue("action").RawValue;
-        //        base.OnActionExecuted(filterContext);
-        //    }
-        //}
 
         protected override void Dispose(bool disposing)
         {

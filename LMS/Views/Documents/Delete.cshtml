@@ -8,7 +8,6 @@
 
 <h3>Vill du radera denna fil?</h3>
 <div>
-    @*<h4>Document</h4>*@
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -23,11 +22,9 @@
 
         <dt>
             Dokumentägare
-            @*@Html.DisplayNameFor(model => model.ApplicationUser.UserName)*@
         </dt>
 
         <dd>
-            @*@Html.DisplayFor(User.Identity.) @Html.DisplayFor(modelItem => model.ApplicationUser.LastName)*@
             @Html.DisplayFor(model => model.ApplicationUser.UserName)
         </dd>
 
@@ -82,12 +79,10 @@
         </dt>
 
         <dd>
-            @*@if (true)*@
             @if (Model.Feedback != null)
             {
                 <span>Finns</span>
             }
-            @*@Html.DisplayFor(model => model.Feedback)*@
         </dd>
 
         <dt>

@@ -18,7 +18,7 @@ using System.Data.Entity;
 
 namespace LMS.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -33,7 +33,6 @@ namespace LMS.Controllers
             foreach (var user in db.Users.ToList())
             {
                 var userRolesId = user.Roles.Select(m => m.RoleId).ToList();
-                //var name = db.Roles.Where(r => userRolesId.Contains(r.Id));
                 var model = new UserViewModel()
                 {
                     Id = user.Id,
@@ -50,53 +49,6 @@ namespace LMS.Controllers
             var sortedUserList = userList.OrderBy(g=> g.FirstName);
             return View(sortedUserList);
 
-
-
-
-            //var allusers = db.Users.ToList();
-            //var users = allusers.Where(x => x.Roles.Select(role => role).Contains("User")).ToList();
-            //var userVM = users.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
-
-            //var admins = allusers.Where(x => x.Roles.Select(role => role.Name).Contains("Admin")).ToList();
-            //var adminsVM = admins.Select(user => new UserViewModel { Username = user.FullName, Roles = string.Join(",", user.Roles.Select(role => role.Name)) }).ToList();
-            //var model = new GroupedUserViewModel { Users = userVM, Admins = adminsVM };
-
-            //return View(model);
-
-            //var userList = new List<UserViewModel>();
-            //var applicationDbContext = HttpContext.GetOwinContext().Get<ApplicationDbContext>();
-            //var users = from u in db.Users
-            //            from ur in u.Roles
-            //            join r in db.Roles on ur.RoleId equals r.Id
-            //            select new
-            //            {
-            //                FirstName = u.FirstName,
-            //                LastName = u.LastName,
-            //                Email = u.Email,
-            //                PhoneNumber = u.PhoneNumber,
-            //                RoleName = r.Name,
-            //            };
-
-
-            //userList.Add(users);
-            //var usersWithRole = users.ToArray();
-
-            //IEnumerable<UserViewModel> usersWithRole = users;
-
-            //var users = db.Users
-            //    .Join(
-            //    db.Roles,
-            //    u => u.Id,
-            //    r => r.,
-            //    (u, r) => new { u }
-            //    )
-            //    .GroupBy(r => u.r)
-
-            //    .Select(r => new {  })
-
-
-            // users is anonymous type, map it to a Model 
-            //return View();
         }
 
         public AccountController()
@@ -216,7 +168,7 @@ namespace LMS.Controllers
             }
         }
 
-        //
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -225,7 +177,7 @@ namespace LMS.Controllers
             return View();
         }
 
-        //
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -290,25 +242,14 @@ namespace LMS.Controllers
         }
 
         // GET: UserDetails/5
-        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
+        [Authorize(Roles = LMSConstants.RoleTeacher)]
         public ActionResult UserDetails(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            //Course course = db.Courses.Find(id);
-            //if (course == null)
-            //{
-            //    return HttpNotFound();
-            //}
-
-            //TempData["CourseId"] = course.Id;
-            //TempData["DocumentParent"] = LMSConstants.Course;
-
-            //ViewBag.DocumentModel = db.Documents
-            //    .Where(d => d.CourseId == id)
-            //    .ToList();
+            
             ApplicationUser currentUser = db.Users.Find(id);
 
             if (User.IsInRole(LMSConstants.RoleTeacher))

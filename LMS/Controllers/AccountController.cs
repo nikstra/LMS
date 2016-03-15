@@ -304,7 +304,7 @@ namespace LMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public ActionResult EditUser([Bind(Include = "Id,GroupId,Email,PhoneNumber,FirstName,LastName")] ApplicationUser currentUser)
+        public ActionResult EditUser([Bind(Include = "Id,GroupId,Email,PhoneNumber,FirstName,LastName")] ApplicationUser currentUser, FormCollection form)
         {
             if (ModelState.IsValid)
             {
@@ -326,7 +326,7 @@ namespace LMS.Controllers
                     return RedirectToAction("UserList", "Account");
                 }
                 else
-                    return RedirectToAction("Details", "Groups", new { id = currentUser.GroupId });
+                    return RedirectToAction("Details", "Groups", new { id = form["GroupId"] });
             }
             return View(currentUser);
         }

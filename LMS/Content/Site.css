@@ -120,3 +120,8 @@ ul.nav a:hover {
     border: none;
     cursor: text !important;
 }
+
+#Feedback {
+    resize: none;
+    height: 100px;
+}

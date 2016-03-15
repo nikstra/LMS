@@ -13,6 +13,7 @@ namespace LMS.Models
         [Display(Name = "Namn")]
         public string Name { get; set; }
         [Display(Name = "Beskrivning")]
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
         [Display(Name = "Startdatum")]
         [DataType(DataType.Date)]

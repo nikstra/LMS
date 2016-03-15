@@ -40,10 +40,6 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
-            //var rd = ControllerContext.RouteData;
-            //var currentAction = rd.GetRequiredString("action");
-            //var currentController = rd.GetRequiredString("controller");
-
             var activeUser = db.Users
                 .Where(u => u.UserName == User.Identity.Name)
                 .FirstOrDefault();
@@ -61,7 +57,7 @@ namespace LMS.Controllers
 
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
-                TempData["IsAdministator"] = true;
+                TempData["IsAdministrator"] = true;
                 ViewBag.IsAdministrator = true;
                 return View(group);
             }

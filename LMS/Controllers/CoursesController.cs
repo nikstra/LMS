@@ -48,7 +48,7 @@ namespace LMS.Controllers
 
             if (User.IsInRole(LMSConstants.RoleTeacher))
             {
-                TempData["IsAdministator"] = true;
+                TempData["IsAdministrator"] = true;
                 ViewBag.IsAdministrator = true;
                 return View(course);
             }

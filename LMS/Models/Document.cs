@@ -13,6 +13,7 @@ namespace LMS.Models
         public string Name { get; set; }
         [Display(Name = "Beskrivning")]
         public string Description { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Feedback { get; set; }
         [Display(Name = "Tidsstämpel")]
         public DateTime TimeStamp { get; set; }

@@ -60,6 +60,7 @@ namespace LMS.Controllers
             return View();
         }
 
+        [Authorize(Roles = LMSConstants.RoleTeacher + "," + LMSConstants.RoleStudent)]
         public ActionResult Student()
         {
             var currentUser = UserManager.FindById(User.Identity.GetUserId());

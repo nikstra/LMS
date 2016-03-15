@@ -26,6 +26,9 @@
         <th>
             @Html.DisplayNameFor(model => model.RoleName)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group)
+        </th>
     </tr>
 
 @foreach (var item in Model) {
@@ -44,6 +47,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.RoleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Group.Name)
         </td>
         <td>
             @Html.ActionLink("Detaljer","UserDetails", "Account", new { id = item.Id }, null) |

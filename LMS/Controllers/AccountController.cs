@@ -159,7 +159,8 @@ namespace LMS.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
-                    RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name
+                    RoleName = db.Roles.Where(r => userRolesId.Contains(r.Id)).Single().Name,
+                    Group = user.Group
 
                 };
                 userList.Add(model);

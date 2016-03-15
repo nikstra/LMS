@@ -20,6 +20,8 @@ namespace LMS.Models
         public string PhoneNumber { get; set; }
         [Display(Name = "Roll")]
         public string RoleName { get; set; }
+        [Display(Name = "Grupp")]
+        public Group Group { get; set; }
     }
 
 

@@ -66,6 +66,33 @@ namespace LMS.Migrations
 
 
 
+            ///////////////////////////////
+            groupStartDate = new DateTime(2016, 4, 10).StartOfNextWeek(DayOfWeek.Monday).Date;
+
+            newGroup = AddOrUpdateGroup(context, "Java", "Påbyggnadskurs webbutveckling i Java", groupStartDate, 60);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Java grunder", "Grunderna i programmeringsspråket Java", groupStartDate, 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning Java", loremIpsum[0], ActivityType.Lecture, groupStartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Java Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i Java", ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Java The Next Step", "Mer om programmering i Java", ActivityType.Codealong, newActivity.EndDate.AddWorkDays(1), 1);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", loremIpsum[0], newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Spring Framework", loremIpsum[0], ActivityType.Elearning, newCourse.StartDate, 3);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "SQL", "Databasfrågor med SQL", ActivityType.Elearning, newCourse.EndDate.AddWorkDays(1), 2);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend", "Html, Javascript och css", newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "HTML 5", "Skapa webbsidor med den senaste HTML versionen", ActivityType.Lecture, newCourse.StartDate, 3);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker", ActivityType.Excercise, newCourse.StartDate, 2);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend 2", "Avancerade frontendlösningar", newActivity.EndDate.AddWorkDays(1), 5);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Bootstrap 3", "Designa webbsidor med Bootstrap", ActivityType.Elearning, newCourse.StartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "JQuery", "Manipulera DOM med JQuery", ActivityType.Lecture, newCourse.StartDate, 3);
+
+            newCourse = AppendOrUpdateCourse(context, newGroup, "Java fortsättning", "Fortsättning på Java-kursen", newActivity.EndDate.AddWorkDays(1), 10);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Java, använda SOLID", "Föreläsning om SOLID-principen och Java", ActivityType.Lecture, newCourse.StartDate, 2);
+            newActivity = AppendOrUpdateActivity(context, newCourse, "Garage", "Skriv ett program.", ActivityType.Excercise, newCourse.StartDate, 5);
+            //////////////////////////////
+
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
 
@@ -96,7 +123,7 @@ namespace LMS.Migrations
                 .Distinct()
                 .ToList();
 
-            AddStudents(userManager, randGen.People(100), groupIds, context.Users.Count());
+            AddStudents(userManager, randGen.People(50), groupIds, context.Users.Count());
 
             AddOrUpdateUser(
                 userManager,

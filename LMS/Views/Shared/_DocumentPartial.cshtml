@@ -70,7 +70,7 @@
             <td class="col-md-3">
                 @if (TempData.Peek("IsAdministator") != null || item.ApplicationUserId == (string)TempData.Peek("UserId"))
                 {
-                    if(TempData.Peek("IsAdministator") != null  || (bool)TempData.Peek("Assignment") != true)
+                    if(TempData.Peek("IsAdministator") != null  || (TempData.Peek("Assignment") == null ? false : true) != true)
                     {
                         @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
                         @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>

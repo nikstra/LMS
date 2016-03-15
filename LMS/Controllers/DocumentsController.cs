@@ -134,10 +134,20 @@ namespace LMS.Controllers
                         uploadDocument.GroupId = id;
                     }
 
-                    upload.SaveAs(localPath);
+                    try
+                    {
+                        upload.SaveAs(localPath);
 
-                    db.Documents.Add(uploadDocument);
-                    db.SaveChanges();
+                        db.Documents.Add(uploadDocument);
+                        db.SaveChanges();
+                    }
+                    catch(HttpException ex)
+                    {
+                        if (TempData["ReturnPath"] != null)
+                            return Content(string.Format("Uppladdningen misslyckades: {0} <p /> <a href='{1}'>Tillbaka</a>",ex.Message, TempData["ReturnPath"]));
+                        else
+                            return Content("Uppladdningen misslyckades: " + ex.Message + "<p /><a href='/'>Hem</a>");
+                    }
                 }
 
                 return RedirectToAction("Details", type, new { id = id });
@@ -296,7 +306,26 @@ namespace LMS.Controllers
 
             if (System.IO.File.Exists(fullPath))
             {
-                System.IO.File.Delete(fullPath);
+                try
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+                catch(IOException ex)
+                {
+                    if (TempData["ReturnPath"] != null)
+                        return Content(string.Format("Kunde inte radera filen: {0} <p /> <a href='{1}'>Tillbaka</a>", ex.Message, TempData["ReturnPath"]));
+                    else
+                        return Content("Kunde inte radera filen: " + ex.Message + "<p /><a href='/'>Hem</a>");
+
+                }
+                catch(UnauthorizedAccessException ex)
+                {
+                    if (TempData["ReturnPath"] != null)
+                        return Content(string.Format("Kunde inte radera filen: {0} <p /> <a href='{1}'>Tillbaka</a>", ex.Message, TempData["ReturnPath"]));
+                    else
+                        return Content("Kunde inte radera filen: " + ex.Message + "<p /><a href='/'>Hem</a>");
+
+                }
             }
 
             db.Documents.Remove(document);

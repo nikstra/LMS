@@ -32,7 +32,7 @@ namespace LMS.Controllers
         {
             var documents = db.Documents.Include(d => d.Activity)/*.Include(d => d.ApplicationUser)*/.Include(d => d.Course).Include(d => d.Group);
             if (User.IsInRole(LMSConstants.RoleTeacher))
-                TempData["IsAdministator"] = true;
+                TempData["IsAdministrator"] = true;
 
             var activeUser = db.Users
                 .Where(u => u.UserName == User.Identity.Name)

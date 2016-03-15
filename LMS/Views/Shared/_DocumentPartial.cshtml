@@ -1,12 +1,16 @@
 ﻿@model IEnumerable<LMS.Models.Document>
 <a name="documents"></a>
-@if (TempData.Peek("IsAdministator") != null || TempData["DocumentParent"] == LMS.Constants.LMSConstants.Group)
+@{
+    bool isAdministrator = (TempData["IsAdministrator"] != null ? true : false);
+    bool isAssignment = (TempData["Assignment"] != null ? true : false);
+}
+@if (isAdministrator || TempData["DocumentParent"] == LMS.Constants.LMSConstants.Group)
 {
     <p>
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = TempData["ParentId"] }), null)
     </p>
 }
-@if (TempData.Peek("Assignment") != null && TempData.Peek("IsAdministator") == null)
+@if (isAssignment && !isAdministrator)
 {
     <p>
         @Html.ActionLink("Ladda upp dokument", "Upload", "Documents", new RouteValueDictionary(new { type = LMS.Constants.LMSConstants.Activity, id = TempData["ParentId"] }), null)
@@ -26,16 +30,11 @@
             @Html.DisplayNameFor(model => model.Feedback)
         </th>
         <th class="col-md-2">
-            @*@Html.DisplayNameFor(model => model.ApplicationUser.UserName)*@
             Dokumentägare
         </th>
         <th class="col-md-2">
             @Html.DisplayNameFor(model => model.TimeStamp)
         </th>
-        @*@if (TempData["IsAdministator"] != null)
-        {
-            <th class="col-md-3"></th>
-        }*@
         <th class="col-md-3"></th>
     </tr>
 
@@ -43,13 +42,10 @@
     {
         <tr>
             <td class="col-md-2">
-                @*@Html.DisplayFor(modelItem => item.Name)*@
                 @if (TempData["DocumentParent"] == null) { TempData["DocumentParent"] = "Document"; }
                 @Html.ActionLink(item.Name, "Download", "Documents",
                                 new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }),
                                 new Dictionary<string, object> { { "title", "Ladda ned fil" } })
-                @*@Html.ActionLink(item.Name, "Download", "Documents", new { id = item.Id }, new { title = "Ladda ned fil" })*@
-                @*@Html.Hyperlink(System.Web.HttpContext.Current.Server.MapPath(item.LocalPath), item.Name)*@
             </td>
             <td class="col-md-2">
                 @Html.DisplayFor(modelItem => item.Description)
@@ -59,7 +55,6 @@
                 {
                     <span>Finns</span>
                 }
-                @*@Html.DisplayFor(modelItem => item.Feedback)*@
             </td>
             <td class="col-md-2">
                 @Html.DisplayFor(modelItem => item.ApplicationUser.FirstName) @Html.DisplayFor(modelItem => item.ApplicationUser.LastName)
@@ -68,9 +63,9 @@
                 @Html.DisplayFor(modelItem => item.TimeStamp)
             </td>
             <td class="col-md-3">
-                @if (TempData.Peek("IsAdministator") != null || item.ApplicationUserId == (string)TempData.Peek("UserId"))
+                @if (isAdministrator || item.ApplicationUserId == (string)TempData.Peek("UserId"))
                 {
-                    if(TempData.Peek("IsAdministator") != null  || (TempData.Peek("Assignment") == null ? false : true) != true)
+                    if (isAdministrator || !isAssignment)
                     {
                         @Html.ActionLink("Redigera", "Edit", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>
                         @Html.ActionLink("Radera", "Delete", "Documents", new RouteValueDictionary(new { type = TempData["DocumentParent"], id = item.Id }), null) <span>|</span>

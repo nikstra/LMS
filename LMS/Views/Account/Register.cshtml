@@ -23,8 +23,6 @@
         }
     </div>
     
-   
-    
     if (Request.UrlReferrer.LocalPath == (string)TempData["ReturnPath"])
     {
         @Html.Hidden("GroupId", TempData["GroupId"])
@@ -64,13 +62,6 @@
     
         TempData["NoGroup"] = "teacher";
     }
-    @*<div class="form-group">
-        @Html.LabelFor(model => model.Group, "Grupp", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("GroupId", EnumHelper.GetSelectList(typeof(Group)), htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Group, "", new { @class = "text-danger" })
-        </div>
-    </div>*@
 
     <div class="form-group">
         @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })

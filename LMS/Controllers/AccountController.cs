@@ -185,7 +185,7 @@ namespace LMS.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = LMSConstants.RoleTeacher)]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, FormCollection form)
         {
 
             if (db.Users.Any(u => u.Email == model.Email))
@@ -203,7 +203,9 @@ namespace LMS.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    if (TempData["NoGroup"] != null)
+                    var role = form["Role"];
+
+                    if (role == "1")
                     {
                         model.GroupId = null;
                     }

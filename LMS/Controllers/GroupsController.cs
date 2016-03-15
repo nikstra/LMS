@@ -182,7 +182,10 @@ namespace LMS.Controllers
             }
 
             var usersInGroup = db.Users
-                .Where(u => u.GroupId == id) ?? null;
+                .Where(u => u.GroupId == id)
+                .OrderBy(u => u.FirstName)
+                ?? null;
+                
 
             if (usersInGroup.Count() > 0)
             {

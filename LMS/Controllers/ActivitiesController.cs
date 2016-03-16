@@ -44,17 +44,22 @@ namespace LMS.Controllers
                 return HttpNotFound();
             }
 
+            var activeUser = db.Users
+                .Where(u => u.UserName == User.Identity.Name)
+                .FirstOrDefault();
+
             TempData["ParentId"] = activity.Id;
             TempData["DocumentParent"] = LMSConstants.Activity;
             TempData["ReturnPath"] = Request.FilePath;
+            TempData["UserId"] = activeUser.Id;
 
             if (activity.Type == ActivityType.Assignment && User.IsInRole(LMSConstants.RoleTeacher))
             {
                 TempData["Assignment"] = true;
 
-                var activeUser = db.Users
-                    .Where(u => u.UserName == User.Identity.Name)
-                    .FirstOrDefault();
+                //var activeUser = db.Users
+                //    .Where(u => u.UserName == User.Identity.Name)
+                //    .FirstOrDefault();
 
                 ViewBag.DocumentModel = db.Documents // Filtrera ut inluppar??
                     .Where(d => d.ActivityId == id && d.Activity.Type == ActivityType.Assignment)            //d.ApplicationUserId == activeUser.Id)
@@ -64,9 +69,9 @@ namespace LMS.Controllers
             {
                 TempData["Assignment"] = true;
 
-                var activeUser = db.Users
-                    .Where(u => u.UserName == User.Identity.Name)
-                    .FirstOrDefault();
+                //var activeUser = db.Users
+                //    .Where(u => u.UserName == User.Identity.Name)
+                //    .FirstOrDefault();
 
                 ViewBag.DocumentModel = db.Documents
                     .Where(d => d.ActivityId == id && d.ApplicationUserId == activeUser.Id)

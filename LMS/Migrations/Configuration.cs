@@ -64,6 +64,8 @@ namespace LMS.Migrations
             newActivity = AppendOrUpdateActivity(context, newCourse, "C#, använda SOLID", "Föreläsning om SOLID-principen och C#", ActivityType.Lecture, newCourse.StartDate, 2);
             newActivity = AppendOrUpdateActivity(context, newCourse, "Garage", "Skriv ett program.", ActivityType.Excercise, newCourse.StartDate, 5);
 
+            // We want to be in the .Net group ;)
+            int ourDevTeamGroupId = newGroup.Id;
 
 
             ///////////////////////////////
@@ -134,7 +136,7 @@ namespace LMS.Migrations
                     PhoneNumber = "070-123456",
                     FirstName = "Robert",
                     LastName = "Dahlin",
-                    GroupId = newGroup.Id
+                    GroupId = ourDevTeamGroupId
                 },
                 "Abc_123",
                 LMSConstants.RoleStudent
@@ -149,7 +151,7 @@ namespace LMS.Migrations
                     PhoneNumber = "070-123456",
                     FirstName = "Oscar",
                     LastName = "Urbina",
-                    GroupId = newGroup.Id
+                    GroupId = ourDevTeamGroupId
                 },
                 "Abc_123",
                 LMSConstants.RoleStudent
@@ -164,7 +166,7 @@ namespace LMS.Migrations
                     PhoneNumber = "070-123456",
                     FirstName = "Niklas",
                     LastName = "Strand",
-                    GroupId = newGroup.Id
+                    GroupId = ourDevTeamGroupId
                 },
                 "Abc_123",
                 LMSConstants.RoleStudent

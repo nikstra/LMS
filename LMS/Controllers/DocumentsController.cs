@@ -27,9 +27,10 @@ namespace LMS.Controllers
         }
 
         // GET: Documents
+        //[ChildActionOnly]
         public ActionResult Index()
         {
-            var documents = db.Documents.Include(d => d.Activity).Include(d => d.Course).Include(d => d.Group);
+            var documents = db.Documents.Include(d => d.Activity)/*.Include(d => d.ApplicationUser)*/.Include(d => d.Course).Include(d => d.Group);
             if (User.IsInRole(LMSConstants.RoleTeacher))
                 TempData["IsAdministrator"] = true;
 
@@ -38,7 +39,7 @@ namespace LMS.Controllers
                 .FirstOrDefault();
 
             TempData["UserId"] = activeUser.Id;
-            
+
             return View(documents.ToList());
         }
 
@@ -71,6 +72,10 @@ namespace LMS.Controllers
         // GET: Documents/Create
         public ActionResult Upload()
         {
+            ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name");
+            //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName");
+            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name");
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name");
             return View();
         }
 
@@ -79,7 +84,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId,CourseId,GroupId")] Document document, HttpPostedFileBase upload, string type, int? id)
+        public ActionResult Upload([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId," +/*ApplicationUserId,*/"CourseId,GroupId")] Document document, HttpPostedFileBase upload, string type, int? id)
         {
             if (ModelState.IsValid)
             {
@@ -136,10 +141,10 @@ namespace LMS.Controllers
                         db.Documents.Add(uploadDocument);
                         db.SaveChanges();
                     }
-                    catch(HttpException ex)
+                    catch (HttpException ex)
                     {
                         if (TempData["ReturnPath"] != null)
-                            return Content(string.Format("Uppladdningen misslyckades: {0} <p /> <a href='{1}'>Tillbaka</a>",ex.Message, TempData["ReturnPath"]));
+                            return Content(string.Format("Uppladdningen misslyckades: {0} <p /> <a href='{1}'>Tillbaka</a>", ex.Message, TempData["ReturnPath"]));
                         else
                             return Content("Uppladdningen misslyckades: " + ex.Message + "<p /><a href='/'>Hem</a>");
                     }
@@ -148,6 +153,10 @@ namespace LMS.Controllers
                 return RedirectToAction("Details", type, new { id = id });
             }
 
+            ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);
+            //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName", document.ApplicationUserId);
+            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", document.CourseId);
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name", document.GroupId);
             return View(document);
         }
 
@@ -178,9 +187,14 @@ namespace LMS.Controllers
             }
             else
             {
+                //TempData["CanViewFeedback"] = null;
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
+            ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);
+            //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName", document.ApplicationUserId);
+            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", document.CourseId);
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name", document.GroupId);
             return View(document);
         }
 
@@ -189,7 +203,7 @@ namespace LMS.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId,CourseId,GroupId")] Document document, FormCollection form)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Feedback,TimeStamp,LocalPath,ActivityId," + /*ApplicationUserId,*/"CourseId,GroupId")] Document document, FormCollection form)
         {
             if (ModelState.IsValid)
             {
@@ -247,7 +261,10 @@ namespace LMS.Controllers
                 else
                     return RedirectToAction("Index");
             }
-
+            ViewBag.ActivityId = new SelectList(db.Activities, "Id", "Name", document.ActivityId);
+            //ViewBag.ApplicationUserId = new SelectList(db.ApplicationUsers, "Id", "UserName", document.ApplicationUserId);
+            ViewBag.CourseId = new SelectList(db.Courses, "Id", "Name", document.CourseId);
+            ViewBag.GroupId = new SelectList(db.Groups, "Id", "Name", document.GroupId);
             return View(document);
         }
 
@@ -293,7 +310,7 @@ namespace LMS.Controllers
                 {
                     System.IO.File.Delete(fullPath);
                 }
-                catch(IOException ex)
+                catch (IOException ex)
                 {
                     if (TempData["ReturnPath"] != null)
                         return Content(string.Format("Kunde inte radera filen: {0} <p /> <a href='{1}'>Tillbaka</a>", ex.Message, TempData["ReturnPath"]));
@@ -301,7 +318,7 @@ namespace LMS.Controllers
                         return Content("Kunde inte radera filen: " + ex.Message + "<p /><a href='/'>Hem</a>");
 
                 }
-                catch(UnauthorizedAccessException ex)
+                catch (UnauthorizedAccessException ex)
                 {
                     if (TempData["ReturnPath"] != null)
                         return Content(string.Format("Kunde inte radera filen: {0} <p /> <a href='{1}'>Tillbaka</a>", ex.Message, TempData["ReturnPath"]));

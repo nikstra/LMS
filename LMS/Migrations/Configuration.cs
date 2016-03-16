@@ -37,7 +37,7 @@ namespace LMS.Migrations
 
 
             // groupStartDate should not be using DateTime.Now....
-            DateTime groupStartDate = new DateTime(2016, 3, 10).StartOfNextWeek(DayOfWeek.Monday).Date;
+            DateTime groupStartDate = new DateTime(2016, 3, 16).StartOfNextWeek(DayOfWeek.Monday).Date;
 
             Group newGroup = AddOrUpdateGroup(context, ".Net", "Påbyggnadskurs ASP.NET och C#", groupStartDate, 60);
 

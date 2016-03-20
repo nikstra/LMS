@@ -39,30 +39,30 @@ namespace LMS.Migrations
             // groupStartDate should not be using DateTime.Now....
             DateTime groupStartDate = new DateTime(2016, 3, 16).StartOfNextWeek(DayOfWeek.Monday).Date;
 
-            Group newGroup = AddOrUpdateGroup(context, ".Net", "Påbyggnadskurs ASP.NET och C#", groupStartDate, 60);
+            Group newGroup = AddOrUpdateGroup(context, groupStartDate, 60, ".Net", "Påbyggnadskurs ASP.NET och C#");
 
             Activity newActivity;
             Course newCourse;
-            newCourse = AppendOrUpdateCourse(context, newGroup, "C# grunder", "Grunderna i programmeringsspråket C#", groupStartDate, 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#", ActivityType.Lecture, groupStartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#", ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "C# The Next Step", "Mer om programmering i C#", ActivityType.Codealong, newActivity.EndDate.AddWorkDays(1), 1);
+            newCourse = AppendOrUpdateCourse(context, newGroup, groupStartDate, 5, "C# grunder", "Grunderna i programmeringsspråket C#");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, groupStartDate, 2, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Codealong, newActivity.EndDate.AddWorkDays(1), 1, "C# The Next Step", "Mer om programmering i C#");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", "Vi lär oss Entity Framework och Linq", newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Entity Framework 6", "Hantering av EF och code first", ActivityType.Elearning, newCourse.StartDate, 3);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Linq", "Databasfrågor med Linq", ActivityType.Elearning, newCourse.EndDate.AddWorkDays(1), 2);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Databas, grund", "Vi lär oss Entity Framework och Linq");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newCourse.StartDate, 3, "Entity Framework 6", "Hantering av EF och code first");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2, "Linq", "Databasfrågor med Linq");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend", "Html, Javascript och css", newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "HTML 5", "Skapa webbsidor med den senaste HTML versionen", ActivityType.Lecture, newCourse.StartDate, 3);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker", ActivityType.Excercise, newCourse.StartDate, 2);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Webb frontend", "Html, Javascript och css");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newCourse.StartDate, 3, "HTML 5", "Skapa webbsidor med den senaste HTML versionen");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Excercise, newActivity.EndDate.AddWorkDays(1), 2, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend 2", "Avancerade frontendlösningar", newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Bootstrap 3", "Designa webbsidor med Bootstrap", ActivityType.Elearning, newCourse.StartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "JQuery", "Manipulera DOM med JQuery", ActivityType.Lecture, newCourse.StartDate, 3);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Webb frontend 2", "Avancerade frontendlösningar");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newCourse.StartDate, 2, "Bootstrap 3", "Designa webbsidor med Bootstrap");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newActivity.EndDate.AddWorkDays(1), 3, "JQuery", "Manipulera DOM med JQuery");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "C# fortsättning", "Fortsättning på C#-kursen", newActivity.EndDate.AddWorkDays(1), 10);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "C#, använda SOLID", "Föreläsning om SOLID-principen och C#", ActivityType.Lecture, newCourse.StartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Garage", "Skriv ett program.", ActivityType.Excercise, newCourse.StartDate, 5);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 10, "C# fortsättning", "Fortsättning på C#-kursen");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newCourse.StartDate, 2, "C#, använda SOLID", "Föreläsning om SOLID-principen och C#");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Excercise, newActivity.EndDate.AddWorkDays(1), 5, "Garage", "Skriv ett program.");
 
             // We want to be in the .Net group ;)
             int ourDevTeamGroupId = newGroup.Id;
@@ -71,28 +71,28 @@ namespace LMS.Migrations
             ///////////////////////////////
             groupStartDate = new DateTime(2016, 4, 10).StartOfNextWeek(DayOfWeek.Monday).Date;
 
-            newGroup = AddOrUpdateGroup(context, "Java", "Påbyggnadskurs webbutveckling i Java", groupStartDate, 60);
+            newGroup = AddOrUpdateGroup(context, groupStartDate, 60, "Java", "Påbyggnadskurs webbutveckling i Java");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Java grunder", "Grunderna i programmeringsspråket Java", groupStartDate, 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning Java", loremIpsum[0], ActivityType.Lecture, groupStartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Java Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i Java", ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Java The Next Step", "Mer om programmering i Java", ActivityType.Codealong, newActivity.EndDate.AddWorkDays(1), 1);
+            newCourse = AppendOrUpdateCourse(context, newGroup, groupStartDate, 5, "Java grunder", "Grunderna i programmeringsspråket Java");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, groupStartDate, 2, "Föreläsning Java", loremIpsum[0]);
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2, "Java Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i Java");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Codealong, newActivity.EndDate.AddWorkDays(1), 1, "Java The Next Step", "Mer om programmering i Java");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", loremIpsum[0], newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Spring Framework", loremIpsum[0], ActivityType.Elearning, newCourse.StartDate, 3);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "SQL", "Databasfrågor med SQL", ActivityType.Elearning, newCourse.EndDate.AddWorkDays(1), 2);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Databas, grund", loremIpsum[0]);
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newCourse.StartDate, 3, "Spring Framework", loremIpsum[0]);
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newActivity.EndDate.AddWorkDays(1), 2, "SQL", "Databasfrågor med SQL");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend", "Html, Javascript och css", newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "HTML 5", "Skapa webbsidor med den senaste HTML versionen", ActivityType.Lecture, newCourse.StartDate, 3);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker", ActivityType.Excercise, newCourse.StartDate, 2);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Webb frontend", "Html, Javascript och css");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newCourse.StartDate, 3, "HTML 5", "Skapa webbsidor med den senaste HTML versionen");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Excercise, newActivity.EndDate.AddWorkDays(1), 2, "Javascript och AngularJS", "Skapa interaktivitet med olika skripttekniker");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Webb frontend 2", "Avancerade frontendlösningar", newActivity.EndDate.AddWorkDays(1), 5);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Bootstrap 3", "Designa webbsidor med Bootstrap", ActivityType.Elearning, newCourse.StartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "JQuery", "Manipulera DOM med JQuery", ActivityType.Lecture, newCourse.StartDate, 3);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 5, "Webb frontend 2", "Avancerade frontendlösningar");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Elearning, newCourse.StartDate, 2, "Bootstrap 3", "Designa webbsidor med Bootstrap");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newActivity.EndDate.AddWorkDays(1), 3, "JQuery", "Manipulera DOM med JQuery");
 
-            newCourse = AppendOrUpdateCourse(context, newGroup, "Java fortsättning", "Fortsättning på Java-kursen", newActivity.EndDate.AddWorkDays(1), 10);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Java, använda SOLID", "Föreläsning om SOLID-principen och Java", ActivityType.Lecture, newCourse.StartDate, 2);
-            newActivity = AppendOrUpdateActivity(context, newCourse, "Garage", "Skriv ett program.", ActivityType.Excercise, newCourse.StartDate, 5);
+            newCourse = AppendOrUpdateCourse(context, newGroup, newActivity.EndDate.AddWorkDays(1), 10, "Java fortsättning", "Fortsättning på Java-kursen");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Lecture, newCourse.StartDate, 2, "Java, använda SOLID", "Föreläsning om SOLID-principen och Java");
+            newActivity = AppendOrUpdateActivity(context, newCourse, ActivityType.Excercise, newActivity.EndDate.AddWorkDays(1), 5, "Garage", "Skriv ett program.");
             //////////////////////////////
 
             var roleStore = new RoleStore<IdentityRole>(context);
@@ -250,14 +250,14 @@ namespace LMS.Migrations
         /// Add or update a Group (class).
         /// </summary>
         /// <param name="context">DB context</param>
-        /// <param name="groupName">The name of the group without month and year (this will be calculated based on the start date).</param>
-        /// <param name="description">A description of the group.</param>
         /// <param name="startDate">The date when the group starts.</param>
         /// <param name="duration">The length of the Group in number of days.</param>
+        /// <param name="groupName">The name of the group without month and year (this will be calculated based on the start date).</param>
+        /// <param name="description">A description of the group.</param>
         /// <param name="cultureName">The name of the culture (used when generating month names).</param>
         /// <returns>The newly added Group.</returns>
-        private static Group AddOrUpdateGroup(ApplicationDbContext context, string groupName, string description,
-                                            DateTime startDate, int duration, string cultureName = "sv-SE")
+        private static Group AddOrUpdateGroup(ApplicationDbContext context, DateTime startDate, int duration,
+                                            string groupName, string description, string cultureName = "sv-SE")
         {
             CultureInfo cultureInfo = CultureInfo.GetCultureInfo(cultureName);
             string monthName = DateTimeFormatInfo.GetInstance(cultureInfo).GetMonthName(startDate.Month);
@@ -269,7 +269,7 @@ namespace LMS.Migrations
                 Name = string.Format("{0} {1} {2}", groupName, monthName, startDate.Year),
                 Description = description,
                 StartDate = startDate,
-                EndDate = startDate.AddWorkDays(duration)
+                EndDate = startDate.AddWorkDays(duration - 1)
             };
 
             context.Groups.AddOrUpdate(g => g.Name, newGroup);
@@ -283,20 +283,21 @@ namespace LMS.Migrations
         /// </summary>
         /// <param name="context">DB context</param>
         /// <param name="group">The Group object to which this Course belongs.</param>
-        /// <param name="courseName">The name of the course.</param>
-        /// <param name="description">A description of the course.</param>
         /// <param name="courseStartDate">The date when the course starts.</param>
         /// <param name="duration">The length of the course in number of days.</param>
+        /// <param name="courseName">The name of the course.</param>
+        /// <param name="description">A description of the course.</param>
         /// <returns>The newly created Course.</returns>
-        private Course AppendOrUpdateCourse(ApplicationDbContext context, Group group, string courseName,
-                                                string description, DateTime courseStartDate, int duration)
+        private Course AppendOrUpdateCourse(ApplicationDbContext context, Group group,
+                                            DateTime courseStartDate, int duration,
+                                            string courseName, string description)
         {
             Course newCourse = new Course
             {
                 Name = courseName,
                 Description = description,
                 StartDate = courseStartDate,
-                EndDate = courseStartDate.AddWorkDays(duration),
+                EndDate = courseStartDate.AddWorkDays(duration - 1),
                 GroupId = group.Id
             };
 
@@ -311,13 +312,15 @@ namespace LMS.Migrations
         /// </summary>
         /// <param name="context">DB context</param>
         /// <param name="course">The Course object to which this Activity belongs.</param>
+        /// <param name="activityStartDate">The date when the activity starts.</param>
+        /// <param name="duration">The length of the activity in days.</param>
+        /// <param name="type">The type of the activity.</param>
         /// <param name="name">The name of the activity.</param>
         /// <param name="description">A description of the activity.</param>
-        /// <param name="activityStartDate">The date when the course starts.</param>
-        /// <param name="duration">The length of the activity in days.</param>
         /// <returns>The newly created Activity</returns>
-        private Activity AppendOrUpdateActivity(ApplicationDbContext context, Course course, string name,
-                                                    string description, ActivityType type, DateTime activityStartDate, int duration)
+        private Activity AppendOrUpdateActivity(ApplicationDbContext context, Course course,
+                                                ActivityType type, DateTime activityStartDate, int duration,
+                                                string name, string description)
         {
             Activity newActivity = new Activity
             {
@@ -325,7 +328,7 @@ namespace LMS.Migrations
                 Description = description,
                 Type = type,
                 StartDate = activityStartDate,
-                EndDate = activityStartDate.AddWorkDays(duration),
+                EndDate = activityStartDate.AddWorkDays(duration - 1),
                 CourseId = course.Id
             };
 
@@ -383,7 +386,7 @@ namespace LMS.Migrations
             int maxNumberOfGroupMembers = 14;
 
             Stack<int> availableGroupIds = new Stack<int>();
-            foreach(int id in groupIds)
+            foreach (int id in groupIds)
             {
                 int groupMemberCount = userManager.Users
                     .Where(u => u.GroupId == id)
@@ -454,15 +457,15 @@ namespace LMS.Migrations
                 "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
             };
 
-            //courses "C# grunder", "Grunderna i programmeringsspråket C#");
+        //courses "C# grunder", "Grunderna i programmeringsspråket C#");
 
-            //newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#", groupStartDate, 2);
-            //newActivity = AppendOrUpdateActivity(context, newCourse, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#", newActivity.EndDate.AddWorkDays(1), 2);
-            //newActivity = AppendOrUpdateActivity(context, newCourse, "C# The Next Step", "Mer om programmering i C#", newActivity.EndDate.AddWorkDays(1), 1);
+        //newActivity = AppendOrUpdateActivity(context, newCourse, "Föreläsning C#", "Föreläsning och codealong där vi lär oss grunderna i Visual Studio och C#", groupStartDate, 2);
+        //newActivity = AppendOrUpdateActivity(context, newCourse, "C# Fundamentals", "E-learning som går igenom variabeldeklarationer och flödeskontroll i C#", newActivity.EndDate.AddWorkDays(1), 2);
+        //newActivity = AppendOrUpdateActivity(context, newCourse, "C# The Next Step", "Mer om programmering i C#", newActivity.EndDate.AddWorkDays(1), 1);
 
-            //newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", "Vi lär oss Entity Framework och Linq", newActivity.EndDate.AddWorkDays(1), 5);
-            //newActivity = AppendOrUpdateActivity(context, newCourse, "Entity Framework 6", "Hantering av EF och code first", newCourse.StartDate, 3);
-            //newActivity = AppendOrUpdateActivity(context, newCourse, "Linq", "Databasfrågor med Linq", newCourse.EndDate.AddWorkDays(1), 2);
+        //newCourse = AppendOrUpdateCourse(context, newGroup, "Databas, grund", "Vi lär oss Entity Framework och Linq", newActivity.EndDate.AddWorkDays(1), 5);
+        //newActivity = AppendOrUpdateActivity(context, newCourse, "Entity Framework 6", "Hantering av EF och code first", newCourse.StartDate, 3);
+        //newActivity = AppendOrUpdateActivity(context, newCourse, "Linq", "Databasfrågor med Linq", newCourse.EndDate.AddWorkDays(1), 2);
 
         #endregion
     }

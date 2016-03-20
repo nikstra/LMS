@@ -6,7 +6,7 @@ using System.Web;
 
 namespace LMS.Models
 {
-    public class Group // : IValidatableObject
+    public class Group : IValidatableObject
     {
 
         public int Id { get; set; }
@@ -27,16 +27,17 @@ namespace LMS.Models
         public virtual ICollection<ApplicationUser> Users { get; set; }
         public virtual ICollection<Course> Courses { get; set; }
 
-        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        //{
-        //    if (EndDate < StartDate)
-        //    {
-        //        yield return new ValidationResult("Slutdatum måste vara senare än startdatum!");
-        //    }
-        //    if (StartDate < DateTime.Now.Date)
-        //    {
-        //        yield return new ValidationResult("Startdatum har passerat!");
-        //    }
-        //}
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (EndDate < StartDate)
+            {
+                yield return new ValidationResult("Slutdatum måste vara senare än startdatum.");
+            }
+
+            //if (StartDate < DateTime.Now.Date)
+            //{
+            //    yield return new ValidationResult("Startdatum har passerat.");
+            //}
+        }
     }
 }
